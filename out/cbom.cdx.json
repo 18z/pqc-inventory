@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:c7e5bec9-4b03-4357-ba8e-186ae99b5c16",
+  "serialNumber": "urn:uuid:18ff8bdd-5d45-4f75-bb24-2895b4e83239",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-08T01:30:22.133713+00:00",
+    "timestamp": "2026-09-08T06:10:57.686957+00:00",
     "tools": {
       "components": [
         {
@@ -32,7 +32,7 @@
       "type": "cryptographic-asset",
       "bom-ref": "crypto:aes",
       "name": "AES",
-      "description": "Detected via static inventory (quantum_risk=low; hint=symmetric-grover-consideration)",
+      "description": "Detected via static inventory (quantum_risk=high; hint=classical-public-key-shor)",
       "cryptoProperties": {
         "assetType": "algorithm",
         "algorithmProperties": {
@@ -48,6 +48,15 @@
       },
       "evidence": {
         "occurrences": [
+          {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 11,
+            "rule_ids": [
+              "py-ssl",
+              "py-tls-cipher-aes",
+              "py-tls-cipher-rsa"
+            ]
+          },
           {
             "location": "js_app/crypto_demo.js",
             "line": 30,
@@ -335,6 +344,15 @@
             ]
           },
           {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 11,
+            "rule_ids": [
+              "py-ssl",
+              "py-tls-cipher-aes",
+              "py-tls-cipher-rsa"
+            ]
+          },
+          {
             "location": "js_app/crypto_demo.js",
             "line": 9,
             "rule_ids": [
@@ -369,6 +387,21 @@
             "line": 3,
             "rule_ids": [
               "dep-rsa"
+            ]
+          },
+          {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 35,
+            "rule_ids": [
+              "py-cryptography-lib",
+              "py-rsa-module"
+            ]
+          },
+          {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 37,
+            "rule_ids": [
+              "py-rsa-crypto"
             ]
           }
         ]
@@ -421,7 +454,7 @@
       "type": "cryptographic-asset",
       "bom-ref": "crypto:tls-ssl",
       "name": "TLS/SSL",
-      "description": "Detected via static inventory (quantum_risk=medium; hint=ambiguous-or-protocol)",
+      "description": "Detected via static inventory (quantum_risk=high; hint=classical-public-key-shor)",
       "cryptoProperties": {
         "assetType": "protocol",
         "algorithmProperties": {
@@ -437,6 +470,15 @@
       },
       "evidence": {
         "occurrences": [
+          {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 11,
+            "rule_ids": [
+              "py-ssl",
+              "py-tls-cipher-aes",
+              "py-tls-cipher-rsa"
+            ]
+          },
           {
             "location": "python_app/crypto_demo.py",
             "line": 6,
@@ -479,6 +521,14 @@
             "rule_ids": [
               "py-cryptography-lib",
               "py-ed25519",
+              "py-rsa-module"
+            ]
+          },
+          {
+            "location": "python_app/tls_cipher_site.py",
+            "line": 35,
+            "rule_ids": [
+              "py-cryptography-lib",
               "py-rsa-module"
             ]
           },

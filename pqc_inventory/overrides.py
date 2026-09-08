@@ -272,3 +272,54 @@ def merge_annotation_specs(
             )
         )
     return specs
+
+
+# Public field names for the inventory summary (not invented values).
+_SUMMARY_FIELD = {
+    "data_lifetime_years": "lifetime",
+    "exposure": "exposure",
+    "owner": "owner",
+}
+_FIELD_ORDER = {"lifetime": 0, "exposure": 1, "owner": 2}
+
+
+def summarize_overrides_applied(findings: Iterable[Any]) -> dict[str, Any]:
+    """Build the top-level ``overrides_applied`` object from applied findings.
+
+    Only fields that were actually written onto a finding are listed.
+    ``count`` is the number of findings that received at least one override
+    (0 when none). Sources are the real override sources, never guessed.
+    """
+    items: list[dict[str, Any]] = []
+    sources: set[str] = set()
+    for finding in findings:
+        applied = getattr(finding, "overrides_applied", None) or {}
+        if not applied:
+            continue
+        fields: list[str] = []
+        item_sources: list[str] = []
+        for field_key, src in applied.items():
+            public = _SUMMARY_FIELD.get(str(field_key), str(field_key))
+            if public not in fields:
+                fields.append(public)
+            src_s = str(src) if src else ""
+            if src_s and src_s not in item_sources:
+                item_sources.append(src_s)
+            if src_s:
+                sources.add(src_s)
+        fields.sort(key=lambda name: (_FIELD_ORDER.get(name, 9), name))
+        item_sources.sort()
+        items.append(
+            {
+                "file": getattr(finding, "file", ""),
+                "line": getattr(finding, "line", None),
+                "fields": fields,
+                "sources": item_sources,
+            }
+        )
+    items.sort(key=lambda item: (item["file"], item["line"] if item["line"] is not None else -1))
+    return {
+        "count": len(items),
+        "sources": sorted(sources),
+        "items": items,
+    }

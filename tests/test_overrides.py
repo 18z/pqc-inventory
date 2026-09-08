@@ -130,3 +130,89 @@ def test_overrides_json_file(tmp_path: Path):
     assert py
     assert any(f.data_lifetime_years == 30 for f in py)
     assert any(f.owner == "json-owner" for f in py)
+
+
+
+def test_inventory_overrides_applied_summary_matches_findings(tmp_path: Path):
+    result = scan_directory(SAMPLE, hash_policy="keep")
+    json_path, _, _ = write_outputs(result, tmp_path / "out")
+    inventory = json.loads(json_path.read_text(encoding="utf-8"))
+    summary = inventory["overrides_applied"]
+    assert set(summary) >= {"count", "sources", "items"}
+    assert summary["count"] == len(summary["items"])
+    assert summary["count"] > 0
+
+    expected_items = []
+    for finding in result.findings:
+        applied = finding.overrides_applied or {}
+        if not applied:
+            continue
+        fields = []
+        if "data_lifetime_years" in applied:
+            fields.append("lifetime")
+        if "exposure" in applied:
+            fields.append("exposure")
+        if "owner" in applied:
+            fields.append("owner")
+        for key in applied:
+            if key not in ("data_lifetime_years", "exposure", "owner"):
+                fields.append(key)
+        item_sources = sorted({str(v) for v in applied.values() if v})
+        expected_items.append(
+            {
+                "file": finding.file,
+                "line": finding.line,
+                "fields": fields,
+                "sources": item_sources,
+            }
+        )
+    expected_items.sort(key=lambda item: (item["file"], item["line"] if item["line"] is not None else -1))
+    assert summary["items"] == expected_items
+    assert summary["sources"] == sorted({s for item in expected_items for s in item["sources"]})
+    # Sample annotations actually applied; no invented CLI/file source.
+    assert "annotation" in summary["sources"] or "annotation-file" in summary["sources"]
+    assert "cli" not in summary["sources"]
+
+
+def test_overrides_applied_summary_empty_when_none(tmp_path: Path):
+    src = tmp_path / "plain.py"
+    src.write_text("private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)\n", encoding="utf-8")
+    result = scan_directory(src, hash_policy="keep")
+    assert result.overrides_applied_summary["count"] == 0
+    assert result.overrides_applied_summary["sources"] == []
+    assert result.overrides_applied_summary["items"] == []
+    json_path, _, _ = write_outputs(result, tmp_path / "out")
+    inventory = json.loads(json_path.read_text(encoding="utf-8"))
+    assert inventory["overrides_applied"]["count"] == 0
+    assert inventory["overrides_applied"]["items"] == []
+
+
+def test_cli_override_appears_in_top_level_summary(tmp_path: Path):
+    out = tmp_path / "out"
+    base = scan_directory(SAMPLE, hash_policy="drop")
+    target_finding = next(f for f in base.findings if f.line and "RSA" in (f.families or [f.family]))
+    rc = main(
+        [
+            "scan",
+            str(SAMPLE),
+            "--out",
+            str(out),
+            "--set-lifetime",
+            f"{target_finding.file}:{target_finding.line}=25",
+            "--hash-policy",
+            "drop",
+        ]
+    )
+    assert rc == 0
+    inv = json.loads((out / "inventory.json").read_text(encoding="utf-8"))
+    summary = inv["overrides_applied"]
+    assert summary["count"] == len(summary["items"])
+    assert "cli" in summary["sources"]
+    matched = [
+        item
+        for item in summary["items"]
+        if item["file"] == target_finding.file and item["line"] == target_finding.line
+    ]
+    assert matched
+    assert "lifetime" in matched[0]["fields"]
+    assert "cli" in matched[0]["sources"]

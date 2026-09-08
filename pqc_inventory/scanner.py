@@ -92,6 +92,8 @@ class ScanResult:
     raw_findings: list[Finding] = field(default_factory=list)
     files_scanned: int = 0
     annotation_overrides: list[OverrideSpec] = field(default_factory=list)
+    # Top-level inventory summary of explicit overrides that actually applied.
+    overrides_applied_summary: dict = field(default_factory=dict)
 
     def counts_by_risk(self) -> dict[str, int]:
         counts = {"high": 0, "medium": 0, "low": 0, "info": 0}
@@ -296,8 +298,11 @@ def scan_directory(
     before scoring; unoverridden lifetime stays ``None`` (never invented).
     Local hash/checksum noise is suppressed per *hash_policy*.
     """
-    from pqc_inventory.merge import merge_findings
-    from pqc_inventory.overrides import apply_overrides_to_finding
+    from pqc_inventory.merge import collapse_tls_protocol_duplicates, merge_findings
+    from pqc_inventory.overrides import (
+        apply_overrides_to_finding,
+        summarize_overrides_applied,
+    )
     from pqc_inventory.priority import enrich_finding_priority
 
     root = Path(target).resolve()
@@ -320,18 +325,18 @@ def scan_directory(
         combined_overrides.extend(extra_overrides)
 
     if merge:
-        merged = merge_findings(result.raw_findings)
-        for m in merged:
-            apply_overrides_to_finding(m, combined_overrides)
-            enrich_finding_priority(m)
-        result.findings = merged
+        working = merge_findings(result.raw_findings)
     else:
-        for f in result.raw_findings:
-            apply_overrides_to_finding(f, combined_overrides)
-            enrich_finding_priority(f)
-        result.findings = list(result.raw_findings)
+        # Still collapse protocol-only TLS duplicates so they are not scored twice.
+        working = collapse_tls_protocol_duplicates(list(result.raw_findings))
+
+    for item in working:
+        apply_overrides_to_finding(item, combined_overrides)
+        enrich_finding_priority(item)
+    result.findings = working
 
     result.findings = apply_hash_suppression(result.findings, policy=hash_policy)
+    result.overrides_applied_summary = summarize_overrides_applied(result.findings)
 
     # Assign display ranks
     result.prioritized()

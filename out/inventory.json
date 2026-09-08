@@ -1,28 +1,28 @@
 {
   "tool": "pqc-inventory",
   "version": "0.1.0",
-  "generated_at": "2026-09-08T01:30:22.132208+00:00",
+  "generated_at": "2026-09-08T06:10:57.684484+00:00",
   "target": "/workspace/a3-pqc-inventory/samples/vulnerable-app",
-  "files_scanned": 4,
+  "files_scanned": 5,
   "summary": {
-    "total_findings": 30,
-    "raw_findings_before_merge": 34,
+    "total_findings": 33,
+    "raw_findings_before_merge": 41,
     "by_risk": {
-      "high": 16,
+      "high": 19,
       "medium": 9,
       "low": 2,
       "info": 3
     },
     "by_family": {
-      "RSA": 6,
+      "RSA": 9,
       "ECDSA/ECDH": 4,
+      "AES": 3,
       "ECDSA": 3,
       "EdDSA": 3,
       "SHA/Hash": 3,
-      "AES": 2,
+      "TLS/SSL": 3,
+      "cryptography": 3,
       "JWT/JOSE": 2,
-      "TLS/SSL": 2,
-      "cryptography": 2,
       "node-forge": 2,
       "JWT": 1,
       "PyCryptodome": 1,
@@ -99,13 +99,67 @@
       "suppressed": false
     },
     {
+      "rule_id": "py-tls-cipher-rsa",
+      "family": "RSA",
+      "file": "python_app/tls_cipher_site.py",
+      "line": 11,
+      "snippet": "ctx.set_ciphers(\"ECDHE-RSA-AES256-GCM-SHA384\")",
+      "quantum_risk": "high",
+      "priority": 3,
+      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
+      "description": "TLS cipher suite using classical RSA (+2 overlapping rules) (+1 overlapping rules)",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-ssl",
+        "py-tls-cipher-aes",
+        "py-tls-cipher-rsa"
+      ],
+      "families": [
+        "AES",
+        "RSA",
+        "TLS/SSL"
+      ],
+      "descriptions": [
+        "TLS cipher suite using classical RSA (+2 overlapping rules)",
+        "stdlib ssl / TLS wrapper (check cipher suites)"
+      ],
+      "merged_count": 4,
+      "children": [
+        {
+          "rule_id": "py-ssl",
+          "family": "TLS/SSL",
+          "file": "python_app/tls_cipher_site.py",
+          "line": 10,
+          "snippet": "ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)",
+          "quantum_risk": "medium",
+          "description": "stdlib ssl / TLS wrapper (check cipher suites)"
+        },
+        {
+          "rule_id": "py-tls-cipher-rsa",
+          "family": "RSA",
+          "file": "python_app/tls_cipher_site.py",
+          "line": 11,
+          "snippet": "ctx.set_ciphers(\"ECDHE-RSA-AES256-GCM-SHA384\")",
+          "quantum_risk": "high",
+          "description": "TLS cipher suite using classical RSA (+2 overlapping rules)"
+        }
+      ],
+      "exposure": "trust_boundary",
+      "priority_score": 150,
+      "priority_reason": "score=150 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
+      "overrides_applied": {},
+      "suppressed": false
+    },
+    {
       "rule_id": "js-node-crypto-rsa",
       "family": "RSA",
       "file": "js_app/crypto_demo.js",
       "line": 9,
       "snippet": "crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });",
       "quantum_risk": "high",
-      "priority": 3,
+      "priority": 4,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto RSA",
       "language": "javascript",
@@ -139,7 +193,7 @@
       "line": 12,
       "snippet": "crypto.generateKeyPairSync('ec', { namedCurve: 'P-256' });",
       "quantum_risk": "high",
-      "priority": 4,
+      "priority": 5,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto EC / ECDH (+1 overlapping rules)",
       "language": "javascript",
@@ -192,7 +246,7 @@
       "line": 13,
       "snippet": "const ecdh = crypto.createECDH('prime256v1');",
       "quantum_risk": "high",
-      "priority": 5,
+      "priority": 6,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto EC / ECDH",
       "language": "javascript",
@@ -224,7 +278,7 @@
       "line": 16,
       "snippet": "crypto.generateKeyPairSync('ed25519');",
       "quantum_risk": "high",
-      "priority": 6,
+      "priority": 7,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js Ed25519",
       "language": "javascript",
@@ -256,7 +310,7 @@
       "line": 19,
       "snippet": "const keys = forge.pki.rsa.generateKeyPair({ bits: 2048 });",
       "quantum_risk": "high",
-      "priority": 7,
+      "priority": 8,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "node-forge RSA",
       "language": "javascript",
@@ -288,7 +342,7 @@
       "line": 26,
       "snippet": "const rsaAlg = 'RSA-OAEP';",
       "quantum_risk": "high",
-      "priority": 8,
+      "priority": 9,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "WebCrypto RSA algorithm name",
       "language": "javascript",
@@ -320,7 +374,7 @@
       "line": 27,
       "snippet": "const ecAlg = { name: 'ECDSA', namedCurve: 'P-256' };",
       "quantum_risk": "high",
-      "priority": 9,
+      "priority": 10,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "WebCrypto classical EC curves",
       "language": "javascript",
@@ -352,7 +406,7 @@
       "line": 7,
       "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519",
       "quantum_risk": "high",
-      "priority": 10,
+      "priority": 11,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Ed25519 / EdDSA classical signature (+2 overlapping rules)",
       "language": "python",
@@ -427,7 +481,7 @@
       "line": 9,
       "snippet": "import ecdsa",
       "quantum_risk": "high",
-      "priority": 11,
+      "priority": 12,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "python-ecdsa classical signatures",
       "language": "python",
@@ -459,7 +513,7 @@
       "line": 21,
       "snippet": "ed_key = ed25519.Ed25519PrivateKey.generate()",
       "quantum_risk": "high",
-      "priority": 12,
+      "priority": 13,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Ed25519 / EdDSA classical signature",
       "language": "python",
@@ -491,7 +545,7 @@
       "line": 24,
       "snippet": "sk = ecdsa.SigningKey.generate(curve=ecdsa.NIST256p)",
       "quantum_risk": "high",
-      "priority": 13,
+      "priority": 14,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "python-ecdsa classical signatures",
       "language": "python",
@@ -523,7 +577,7 @@
       "line": 2,
       "snippet": "ecdsa>=0.18.0",
       "quantum_risk": "high",
-      "priority": 14,
+      "priority": 15,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "ecdsa package dependency",
       "language": "manifest",
@@ -553,7 +607,7 @@
       "line": 3,
       "snippet": "rsa>=4.9",
       "quantum_risk": "high",
-      "priority": 15,
+      "priority": 16,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "rsa package dependency",
       "language": "manifest",
@@ -577,13 +631,95 @@
       "suppressed": false
     },
     {
+      "rule_id": "py-rsa-module",
+      "family": "RSA",
+      "file": "python_app/tls_cipher_site.py",
+      "line": 35,
+      "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa",
+      "quantum_risk": "high",
+      "priority": 17,
+      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
+      "description": "python-rsa / rsa package import (+1 overlapping rules)",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-cryptography-lib",
+        "py-rsa-module"
+      ],
+      "families": [
+        "RSA",
+        "cryptography"
+      ],
+      "descriptions": [
+        "cryptography package (verify algorithms used)",
+        "python-rsa / rsa package import"
+      ],
+      "merged_count": 2,
+      "children": [
+        {
+          "rule_id": "py-cryptography-lib",
+          "family": "cryptography",
+          "file": "python_app/tls_cipher_site.py",
+          "line": 35,
+          "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa",
+          "quantum_risk": "medium",
+          "description": "cryptography package (verify algorithms used)"
+        },
+        {
+          "rule_id": "py-rsa-module",
+          "family": "RSA",
+          "file": "python_app/tls_cipher_site.py",
+          "line": 35,
+          "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa",
+          "quantum_risk": "high",
+          "description": "python-rsa / rsa package import"
+        }
+      ],
+      "exposure": "public_key",
+      "priority_score": 142,
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {},
+      "suppressed": false
+    },
+    {
+      "rule_id": "py-rsa-crypto",
+      "family": "RSA",
+      "file": "python_app/tls_cipher_site.py",
+      "line": 37,
+      "snippet": "return rsa.generate_private_key(public_exponent=65537, key_size=2048)",
+      "quantum_risk": "high",
+      "priority": 18,
+      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
+      "description": "cryptography.io RSA API",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-rsa-crypto"
+      ],
+      "families": [
+        "RSA"
+      ],
+      "descriptions": [
+        "cryptography.io RSA API"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "public_key",
+      "priority_score": 142,
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {},
+      "suppressed": false
+    },
+    {
       "rule_id": "py-ec-crypto",
       "family": "ECDSA/ECDH",
       "file": "python_app/crypto_demo.py",
       "line": 18,
       "snippet": "ec_key = ec.generate_private_key(ec.SECP256R1())",
       "quantum_risk": "high",
-      "priority": 16,
+      "priority": 19,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "cryptography.io elliptic-curve API",
       "language": "python",
@@ -617,7 +753,7 @@
       "line": 7,
       "snippet": "\"jose\": \"^5.2.0\"",
       "quantum_risk": "medium",
-      "priority": 17,
+      "priority": 20,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "jose dependency (check alg usage)",
       "language": "manifest",
@@ -647,7 +783,7 @@
       "line": 6,
       "snippet": "import ssl",
       "quantum_risk": "medium",
-      "priority": 18,
+      "priority": 21,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "stdlib ssl / TLS wrapper (check cipher suites)",
       "language": "python",
@@ -679,7 +815,7 @@
       "line": 5,
       "snippet": "PyJWT>=2.8.0",
       "quantum_risk": "medium",
-      "priority": 19,
+      "priority": 22,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "PyJWT dependency",
       "language": "manifest",
@@ -709,7 +845,7 @@
       "line": 28,
       "snippet": "ctx = ssl.create_default_context()",
       "quantum_risk": "medium",
-      "priority": 20,
+      "priority": 23,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "stdlib ssl / TLS wrapper (check cipher suites)",
       "language": "python",
@@ -743,7 +879,7 @@
       "line": 3,
       "snippet": "const crypto = require('crypto');",
       "quantum_risk": "medium",
-      "priority": 21,
+      "priority": 24,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "Node crypto module import",
       "language": "javascript",
@@ -775,7 +911,7 @@
       "line": 4,
       "snippet": "const forge = require('node-forge');",
       "quantum_risk": "medium",
-      "priority": 22,
+      "priority": 25,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "node-forge import",
       "language": "javascript",
@@ -807,7 +943,7 @@
       "line": 6,
       "snippet": "\"node-forge\": \"^1.3.1\",",
       "quantum_risk": "medium",
-      "priority": 23,
+      "priority": 26,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "node-forge dependency",
       "language": "manifest",
@@ -837,7 +973,7 @@
       "line": 1,
       "snippet": "cryptography>=41.0.0",
       "quantum_risk": "medium",
-      "priority": 24,
+      "priority": 27,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "cryptography package dependency",
       "language": "manifest",
@@ -867,7 +1003,7 @@
       "line": 4,
       "snippet": "pycryptodome>=3.19.0",
       "quantum_risk": "medium",
-      "priority": 25,
+      "priority": 28,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "PyCryptodome/PyCrypto dependency",
       "language": "manifest",
@@ -897,7 +1033,7 @@
       "line": 30,
       "snippet": "const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.alloc(32), Buffer.alloc(12));",
       "quantum_risk": "low",
-      "priority": 26,
+      "priority": 29,
       "reason": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys.",
       "description": "AES symmetric encryption",
       "language": "javascript",
@@ -929,7 +1065,7 @@
       "line": 31,
       "snippet": "aes_cipher = Cipher(algorithms.AES(b\"0\" * 32), modes.ECB())",
       "quantum_risk": "low",
-      "priority": 27,
+      "priority": 30,
       "reason": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys.",
       "description": "AES symmetric encryption",
       "language": "python",
@@ -961,7 +1097,7 @@
       "line": 33,
       "snippet": "const hash = crypto.createHash('sha256').update('demo').digest('hex');",
       "quantum_risk": "info",
-      "priority": 28,
+      "priority": 31,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "SHA hash / integrity",
       "language": "javascript",
@@ -993,7 +1129,7 @@
       "line": 5,
       "snippet": "import hashlib",
       "quantum_risk": "info",
-      "priority": 29,
+      "priority": 32,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",
@@ -1025,7 +1161,7 @@
       "line": 34,
       "snippet": "digest = hashlib.sha256(b\"demo\").hexdigest()",
       "quantum_risk": "info",
-      "priority": 30,
+      "priority": 33,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",
@@ -1051,9 +1187,259 @@
       "suppressed": true
     }
   ],
+  "overrides_applied": {
+    "count": 23,
+    "sources": [
+      "annotation",
+      "annotation-file"
+    ],
+    "items": [
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 3,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 4,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 9,
+        "fields": [
+          "lifetime",
+          "exposure",
+          "owner"
+        ],
+        "sources": [
+          "annotation"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 12,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 13,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 16,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 19,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 23,
+        "fields": [
+          "lifetime",
+          "exposure",
+          "owner"
+        ],
+        "sources": [
+          "annotation"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 26,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 27,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 30,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "js_app/crypto_demo.js",
+        "line": 33,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 5,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 6,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 7,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 9,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 14,
+        "fields": [
+          "lifetime",
+          "exposure",
+          "owner"
+        ],
+        "sources": [
+          "annotation"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 18,
+        "fields": [
+          "lifetime",
+          "exposure",
+          "owner"
+        ],
+        "sources": [
+          "annotation",
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 21,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 24,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 28,
+        "fields": [
+          "lifetime",
+          "exposure",
+          "owner"
+        ],
+        "sources": [
+          "annotation"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 31,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      },
+      {
+        "file": "python_app/crypto_demo.py",
+        "line": 34,
+        "fields": [
+          "owner"
+        ],
+        "sources": [
+          "annotation-file"
+        ]
+      }
+    ]
+  },
   "scope": {
     "defensive_only": true,
-    "analysis": "static analysis of source code + dependency manifests only — not runtime, binaries, network traffic, or complete coverage guarantee",
+    "analysis": "static scan of source code and dependency manifests only, not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM). static analysis of source code + dependency manifests only — not runtime, binaries, network traffic, or complete coverage guarantee",
     "non_goals": [
       "No attack tools or exploits",
       "No key-breaking or cryptanalysis",

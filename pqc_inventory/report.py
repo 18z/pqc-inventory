@@ -8,10 +8,13 @@ from pathlib import Path
 
 from pqc_inventory import __version__
 from pqc_inventory.cbom import build_cbom
+from pqc_inventory.overrides import summarize_overrides_applied
 from pqc_inventory.scanner import ScanResult
 
 SCOPE_BANNER = (
-    "**Scope:** static analysis of source code + dependency manifests only — "
+    "**Scope:** This is a **static scan of source code and dependency manifests only**, "
+    "**not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM). "
+    "static analysis of source code + dependency manifests only — "
     "not runtime, binaries, network traffic, or a complete coverage guarantee."
 )
 
@@ -49,9 +52,12 @@ def build_inventory(result: ScanResult) -> dict:
             "by_family": result.counts_by_family(),
         },
         "findings": [f.to_dict() for f in prioritized],
+        "overrides_applied": summarize_overrides_applied(result.findings),
         "scope": {
             "defensive_only": True,
             "analysis": (
+                "static scan of source code and dependency manifests only, "
+                "not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM). "
                 "static analysis of source code + dependency manifests only — "
                 "not runtime, binaries, network traffic, or complete coverage guarantee"
             ),

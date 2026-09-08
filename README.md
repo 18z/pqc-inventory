@@ -30,6 +30,7 @@ Open these three files:
 Source code and dependency manifests only (Python / JS / `requirements.txt`, `package.json`, and similar).
 
 Not runtime, binaries, or network traffic. It does not cover a whole environment, and it does not promise zero misses.
+This is a static scan of source code and dependency manifests only, not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM).
 
 ## How risk is ranked
 

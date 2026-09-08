@@ -122,6 +122,32 @@ PYTHON_RULES: list[Rule] = [
         languages=("python",),
         description="stdlib ssl / TLS wrapper (check cipher suites)",
     ),
+    # Cipher-suite algorithm is more specific than the protocol label.
+    # Same logical TLS site must not be scored as both protocol and algorithm.
+    Rule(
+        id="py-tls-cipher-rsa",
+        family="RSA",
+        pattern=r"(?i)\b(?:ECDHE|DHE|ECDH)-RSA(?:-[A-Z0-9]+)*\b|\bTLS_(?:ECDHE|DHE)_RSA\b",
+        risk="high",
+        languages=("python",),
+        description="TLS cipher suite using classical RSA",
+    ),
+    Rule(
+        id="py-tls-cipher-ecdsa",
+        family="ECDSA",
+        pattern=r"(?i)\b(?:ECDHE|ECDH)-ECDSA(?:-[A-Z0-9]+)*\b|\bTLS_ECDHE_ECDSA\b",
+        risk="high",
+        languages=("python",),
+        description="TLS cipher suite using classical ECDSA",
+    ),
+    Rule(
+        id="py-tls-cipher-aes",
+        family="AES",
+        pattern=r"(?i)\bAES(?:128|256)-(?:GCM-SHA\d+|SHA(?:256|384)?)\b",
+        risk="low",
+        languages=("python",),
+        description="TLS cipher suite AES algorithm",
+    ),
     Rule(
         id="py-cryptography-lib",
         family="cryptography",
@@ -231,6 +257,30 @@ JS_RULES: list[Rule] = [
         risk="high",
         languages=("javascript",),
         description="WebCrypto classical EC curves",
+    ),
+    Rule(
+        id="js-tls",
+        family="TLS/SSL",
+        pattern=r"""require\s*\(\s*['"](?:node:)?(?:tls|https)['"]\s*\)|from\s+['"](?:node:)?(?:tls|https)['"]|\btls\.(createServer|connect)\b|\bhttps\.(createServer|request|get)\b""",
+        risk="medium",
+        languages=("javascript",),
+        description="Node tls/https protocol wrapper (check cipher suites)",
+    ),
+    Rule(
+        id="js-tls-cipher-rsa",
+        family="RSA",
+        pattern=r"(?i)\b(?:ECDHE|DHE|ECDH)-RSA(?:-[A-Z0-9]+)*\b|\bTLS_(?:ECDHE|DHE)_RSA\b",
+        risk="high",
+        languages=("javascript",),
+        description="TLS cipher suite using classical RSA",
+    ),
+    Rule(
+        id="js-tls-cipher-ecdsa",
+        family="ECDSA",
+        pattern=r"(?i)\b(?:ECDHE|ECDH)-ECDSA(?:-[A-Z0-9]+)*\b|\bTLS_ECDHE_ECDSA\b",
+        risk="high",
+        languages=("javascript",),
+        description="TLS cipher suite using classical ECDSA",
     ),
     Rule(
         id="js-node-crypto-require",

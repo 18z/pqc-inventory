@@ -36,6 +36,11 @@ def test_e2e_sample_scan(tmp_path: Path):
     assert inventory["summary"]["total_findings"] == len(result.findings)
     assert inventory["scope"]["defensive_only"] is True
     assert "static analysis" in inventory["scope"]["analysis"]
+    assert "not runtime" in inventory["scope"]["analysis"]
+    applied = inventory["overrides_applied"]
+    assert applied["count"] == len(applied["items"])
+    assert applied["count"] > 0
+    assert isinstance(applied["sources"], list)
     assert "priority_formula" in inventory
     non_goals = " ".join(inventory["scope"]["non_goals"]).lower()
     assert "migration" in non_goals
@@ -72,6 +77,12 @@ def test_e2e_sample_scan(tmp_path: Path):
     assert "Priority reason" in md
     assert "static analysis of source code" in md
     assert SCOPE_BANNER.split("—")[0].strip("* ") in md or "static analysis" in md
+    # Banner sits immediately after the title and says this is not runtime.
+    assert md.startswith("# PQC Cryptographic Asset Inventory Report\n\n> ")
+    assert "**not runtime**" in md
+    assert "negotiated TLS" in md
+    assert "complete CBOM" in md
+    assert "static scan of source code and dependency manifests only" in md
 
     cbom = json.loads(cbom_path.read_text(encoding="utf-8"))
     assert cbom["bomFormat"] == "CycloneDX"
