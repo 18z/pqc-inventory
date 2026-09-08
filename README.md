@@ -1,3 +1,5 @@
+![pqc-inventory](docs/logo.png)
+
 # pqc-inventory
 
 把專案裡「用了哪些密碼演算法」掃出來，排出該先處理哪個，並產出報告。
