@@ -1,0 +1,18 @@
+{
+  "overrides": [
+    {
+      "file": "python_app/crypto_demo.py",
+      "line": 14,
+      "data_lifetime_years": 20,
+      "exposure": "public_key",
+      "owner": "payments-cli-example"
+    },
+    {
+      "file": "js_app/crypto_demo.js",
+      "line": 23,
+      "data_lifetime_years": 7,
+      "exposure": "trust_boundary",
+      "owner": "auth-cli-example"
+    }
+  ]
+}
