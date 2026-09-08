@@ -2,6 +2,9 @@
 
 # pqc-inventory
 
+給其他 AI agent：見 [AGENTS.md](AGENTS.md)。
+
+
 把專案裡「用了哪些密碼演算法」掃出來，排出該先處理哪個，並產出報告。
 
 適合：合規／密碼盤點、PQC 遷移**開工前**的清單。  
