@@ -2,15 +2,14 @@
 
 # pqc-inventory
 
-給其他 AI agent：見 [AGENTS.md](AGENTS.md)。
+For other AI agents: see [AGENTS.md](AGENTS.md).
 
+Scan a project for the crypto algorithms it uses, rank what to handle first, and write a report.
 
-把專案裡「用了哪些密碼演算法」掃出來，排出該先處理哪個，並產出報告。
+For: compliance / crypto inventory, and a starting list **before** a PQC migration.
+Not a migration engine. It does not guess how long data must stay confidential.
 
-適合：合規／密碼盤點、PQC 遷移**開工前**的清單。  
-不是遷移引擎，也不會猜資料要保密幾年。
-
-## 30 秒試跑
+## Try it in 30 seconds
 
 ```bash
 python3 -m venv .venv
@@ -18,28 +17,28 @@ python3 -m venv .venv
 .venv/bin/python -m pqc_inventory scan samples/vulnerable-app --out ./out
 ```
 
-打開這三個檔：
+Open these three files:
 
-| 檔案 | 給誰看 |
-|------|--------|
-| `out/report.md` | 人：優先序＋下一步 |
-| `out/inventory.json` | 程式：每筆命中的細節 |
-| `out/cbom.cdx.json` | 機器可讀的密碼清單（CycloneDX CBOM） |
+| File | Who it is for |
+|------|----------------|
+| `out/report.md` | People: priority order and next steps |
+| `out/inventory.json` | Programs: details for each hit |
+| `out/cbom.cdx.json` | Machine-readable crypto list (CycloneDX CBOM) |
 
-## 它看什麼
+## What it looks at
 
-只看**原始碼與依賴清單**（Python / JS / `requirements.txt`、`package.json` 等）。
+Source code and dependency manifests only (Python / JS / `requirements.txt`, `package.json`, and similar).
 
-不看執行期、二進位、網路流量。掃不完整個環境，也不保證沒漏。
+Not runtime, binaries, or network traffic. It does not cover a whole environment, and it does not promise zero misses.
 
-## 風險怎麼排
+## How risk is ranked
 
-分數 = 演算法風險 + 資料壽命 + 暴露面。
+Score = algorithm risk + data lifetime + exposure.
 
-- 你沒標壽命，欄位就維持 unknown，工具**不會猜**。
-- 本地 hash／checksum 預設降權，比較不會洗版。
+- If you do not set a lifetime, the field stays unknown. The tool **does not guess**.
+- Local hash / checksum hits are downranked by default so they do not flood the report.
 
-自己標壽命（選用）：
+Set a lifetime yourself (optional):
 
 ```bash
 pqc-inventory scan PATH --out ./out \
@@ -47,38 +46,38 @@ pqc-inventory scan PATH --out ./out \
   --set-owner 'app/crypto.py=payments'
 ```
 
-或在程式上一行寫：
+Or on the line above the code:
 
 ```python
 # pqc-inventory: lifetime=15 exposure=public_key owner=payments
 ```
 
-## CI（選用）
+## CI (optional)
 
-有 HIGH 就失敗：
+Fail when there is a HIGH finding:
 
 ```bash
 pqc-inventory scan PATH --out ./out --fail-on high
 ```
 
-| 結束碼 | 意思 |
-|--------|------|
-| 0 | 通過 |
-| 1 | 超過門檻 |
-| 2 | 路徑或參數錯誤 |
+| Exit code | Meaning |
+|-----------|---------|
+| 0 | Passed |
+| 1 | Over the threshold |
+| 2 | Bad path or arguments |
 
-範例 workflow：`.github/workflows/pqc-inventory.yml`
+Example workflow: `.github/workflows/pqc-inventory.yml`
 
-## 不做的事
+## What it does not do
 
-- 不改程式、不輪替金鑰、不自動換成 PQC
-- 不猜資料壽命或敏感度
-- 不做攻擊、破解、exploit
+- Does not edit code, rotate keys, or switch you to PQC
+- Does not guess data lifetime or sensitivity
+- Does not attack, crack, or exploit
 
-## 測試
+## Tests
 
 ```bash
 .venv/bin/python -m pytest -q
 ```
 
-MIT。僅供防禦性盤點。
+MIT. Defensive inventory only.
