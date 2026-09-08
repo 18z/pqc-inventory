@@ -20,7 +20,8 @@ NEXT_STEPS = """
 
 1. **Triage by priority score (not raw HIGH count)** — Score blends quantum risk,
    data lifetime, and exposure (trust-boundary TLS/JWT vs local hash helper).
-2. **Inventory & ownership** — Fill `owner` and `data_lifetime_years` on findings;
+2. **Inventory & ownership** — Set `owner` / `data_lifetime_years` / `exposure` via
+   in-file annotations or CLI overrides only (never guessed by the scanner);
    assets that must remain confidential/authentic for 10+ years need earlier PQC planning.
 3. **Prefer hybrid / NIST PQC** — Track library support for ML-KEM (FIPS 203), ML-DSA (FIPS 204),
    and SLH-DSA (FIPS 205). Prefer vendor hybrids (classical + PQC) during transition.
@@ -58,6 +59,8 @@ def build_inventory(result: ScanResult) -> dict:
                 "No attack tools or exploits",
                 "No key-breaking or cryptanalysis",
                 "No automatic migration / re-encryption engine",
+                "No guessed data lifetime or sensitivity (explicit overrides only)",
+                "Static source code + dependency manifests only",
             ],
         },
         "priority_formula": {
@@ -143,6 +146,13 @@ def render_markdown(inventory: dict) -> str:
             score = f.get("priority_score", "")
             preason = f.get("priority_reason", "")
             exposure = f.get("exposure", "")
+            overrides_applied = f.get("overrides_applied") or {}
+            overrides_display = (
+                ", ".join(f"{k}←{v}" for k, v in overrides_applied.items())
+                if overrides_applied
+                else "(none)"
+            )
+            suppressed_display = "yes" if f.get("suppressed") else "no"
             lines += [
                 f"### {i}. [{f['quantum_risk'].upper()}] {f['family']} — {f['description']}",
                 "",
@@ -157,6 +167,8 @@ def render_markdown(inventory: dict) -> str:
                 f"- **Quantum risk**: {f['quantum_risk']}",
                 f"- **Owner**: {owner}",
                 f"- **Data lifetime (years)**: {lifetime_display}",
+                f"- **Overrides applied**: {overrides_display}",
+                f"- **Suppressed**: {suppressed_display}",
                 f"- **Risk rationale**: {f['reason']}",
                 f"- **Snippet**: `{f['snippet']}`",
                 "",

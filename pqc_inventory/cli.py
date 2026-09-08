@@ -7,8 +7,16 @@ import sys
 from pathlib import Path
 
 from pqc_inventory import __version__
+from pqc_inventory.overrides import (
+    VALID_EXPOSURES,
+    load_overrides_json,
+    parse_cli_override,
+)
 from pqc_inventory.report import write_outputs
 from pqc_inventory.scanner import scan_directory
+
+RISK_ORDER = {"high": 0, "medium": 1, "low": 2, "info": 3}
+FAIL_ON_CHOICES = ("never", "high", "medium", "low", "info")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -17,7 +25,8 @@ def build_parser() -> argparse.ArgumentParser:
         description=(
             "Defensive static scanner: invent crypto libraries/APIs and flag "
             "quantum-vulnerable usage. No attack or migration tooling. "
-            "Scope: source code + dependency manifests only."
+            "Scope: source code + dependency manifests only. "
+            "Does not guess data lifetime or sensitivity."
         ),
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -40,7 +49,110 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Disable denoise merge (emit raw per-rule hits; not recommended)",
     )
+
+    # --- Cut B: explicit lifetime / exposure overrides ---
+    scan_p.add_argument(
+        "--set-lifetime",
+        action="append",
+        default=[],
+        metavar="FILE[:LINE]=YEARS",
+        help=(
+            "Explicit data_lifetime_years override (repeatable). "
+            "Example: python_app/crypto_demo.py:10=15. "
+            "Unoverridden findings keep lifetime=null (never invented)."
+        ),
+    )
+    scan_p.add_argument(
+        "--set-exposure",
+        action="append",
+        default=[],
+        metavar="FILE[:LINE]=CLASS",
+        help=(
+            "Explicit exposure override (repeatable). "
+            f"Classes: {', '.join(sorted(VALID_EXPOSURES))}."
+        ),
+    )
+    scan_p.add_argument(
+        "--set-owner",
+        action="append",
+        default=[],
+        metavar="FILE[:LINE]=NAME",
+        help="Explicit owner override (repeatable).",
+    )
+    scan_p.add_argument(
+        "--overrides",
+        type=str,
+        default=None,
+        metavar="FILE.json",
+        help="JSON file of explicit overrides (see README). Never invents values.",
+    )
+
+    # --- Cut A: hash / checksum suppression ---
+    scan_p.add_argument(
+        "--hash-policy",
+        choices=("drop", "downrank", "keep"),
+        default="downrank",
+        help=(
+            "Local hash/checksum noise: drop from findings, downrank "
+            "(default), or keep. Does not guess sensitivity."
+        ),
+    )
+
+    # --- Cut C: fail-on / exit codes ---
+    scan_p.add_argument(
+        "--fail-on",
+        choices=FAIL_ON_CHOICES,
+        default="never",
+        help=(
+            "Exit 1 if any non-suppressed finding has quantum_risk at this level "
+            "or worse. Default: never (always exit 0 on successful scan). "
+            "Example for CI: --fail-on high"
+        ),
+    )
+    scan_p.add_argument(
+        "--fail-score",
+        type=int,
+        default=None,
+        metavar="N",
+        help=(
+            "Exit 1 if any non-suppressed finding has priority_score >= N. "
+            "Independent of --fail-on; either threshold can trigger exit 1."
+        ),
+    )
     return parser
+
+
+
+def evaluate_fail(
+    findings: list,
+    *,
+    fail_on: str = "never",
+    fail_score: int | None = None,
+) -> tuple[bool, str]:
+    """Return (should_fail, reason). Suppressed findings are ignored."""
+    active = [f for f in findings if not getattr(f, "suppressed", False)]
+    if fail_on != "never":
+        threshold = RISK_ORDER[fail_on]
+        offenders = [
+            f
+            for f in active
+            if RISK_ORDER.get(getattr(f, "quantum_risk", "info"), 9) <= threshold
+        ]
+        if offenders:
+            return True, (
+                f"--fail-on {fail_on}: {len(offenders)} finding(s) at "
+                f"{fail_on}+ risk"
+            )
+    if fail_score is not None:
+        offenders = [
+            f for f in active if (getattr(f, "priority_score", 0) or 0) >= fail_score
+        ]
+        if offenders:
+            return True, (
+                f"--fail-score {fail_score}: {len(offenders)} finding(s) with "
+                f"priority_score >= {fail_score}"
+            )
+    return False, ""
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -50,17 +162,44 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "scan":
         target = Path(args.path)
         try:
-            result = scan_directory(target, merge=not args.no_merge)
+            extra = []
+            for raw in args.set_lifetime:
+                extra.append(parse_cli_override(raw, field_name="lifetime"))
+            for raw in args.set_exposure:
+                extra.append(parse_cli_override(raw, field_name="exposure"))
+            for raw in args.set_owner:
+                extra.append(parse_cli_override(raw, field_name="owner"))
+            if args.overrides:
+                extra.extend(load_overrides_json(args.overrides))
+        except (ValueError, OSError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+        except Exception as exc:
+            # JSON decode errors
+            if exc.__class__.__name__ == "JSONDecodeError":
+                print(f"error: invalid overrides JSON: {exc}", file=sys.stderr)
+                return 2
+            raise
+
+        try:
+            result = scan_directory(
+                target,
+                merge=not args.no_merge,
+                extra_overrides=extra or None,
+                hash_policy=args.hash_policy,  # type: ignore[arg-type]
+            )
         except FileNotFoundError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
+
         json_path, md_path, cbom_path = write_outputs(result, args.out)
         counts = result.counts_by_risk()
         raw_n = len(result.raw_findings)
+        suppressed_n = sum(1 for f in result.findings if getattr(f, "suppressed", False))
         print(
             f"Scanned {result.files_scanned} file(s); "
             f"{len(result.findings)} merged finding(s) "
-            f"(raw hits: {raw_n})."
+            f"(raw hits: {raw_n}; suppressed: {suppressed_n})."
         )
         print(
             f"  high={counts['high']} medium={counts['medium']} "
@@ -69,6 +208,13 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote: {json_path}")
         print(f"Wrote: {md_path}")
         print(f"Wrote: {cbom_path}")
+
+        should_fail, reason = evaluate_fail(
+            result.findings, fail_on=args.fail_on, fail_score=args.fail_score
+        )
+        if should_fail:
+            print(f"fail: {reason}", file=sys.stderr)
+            return 1
         return 0
 
     parser.error(f"unknown command: {args.command}")
