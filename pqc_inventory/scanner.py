@@ -7,6 +7,10 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Iterable
 
+from pqc_inventory.overrides import (
+    OverrideSpec,
+    parse_annotation_line,
+)
 from pqc_inventory.rules import (
     JS_RULES,
     MANIFEST_RULES,
@@ -15,6 +19,7 @@ from pqc_inventory.rules import (
     REASON_BY_RISK,
     Rule,
 )
+from pqc_inventory.suppress import HashPolicy, apply_hash_suppression
 
 # Extensions / filenames we care about
 PY_EXTS = {".py"}
@@ -56,7 +61,7 @@ class Finding:
     reason: str
     description: str
     language: str
-    # Buyer-interview fields (scanner leaves empty/unknown; optional sidecar later)
+    # Buyer-interview fields — empty/unknown unless explicitly overridden
     owner: str = ""
     data_lifetime_years: int | float | None = None
     # Optional scoring fields (raw hits may leave defaults; merged findings fill them)
@@ -67,6 +72,9 @@ class Finding:
     families: list[str] = field(default_factory=list)
     merged_count: int = 1
     children: list[dict] = field(default_factory=list)
+    # Explicit override / suppression metadata (never invent values)
+    overrides_applied: dict = field(default_factory=dict)
+    suppressed: bool = False
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -83,6 +91,7 @@ class ScanResult:
     findings: list = field(default_factory=list)  # MergedFinding | Finding
     raw_findings: list[Finding] = field(default_factory=list)
     files_scanned: int = 0
+    annotation_overrides: list[OverrideSpec] = field(default_factory=list)
 
     def counts_by_risk(self) -> dict[str, int]:
         counts = {"high": 0, "medium": 0, "low": 0, "info": 0}
@@ -102,13 +111,23 @@ class ScanResult:
         return dict(sorted(out.items(), key=lambda x: (-x[1], x[0])))
 
     def prioritized(self) -> list:
-        """Sort by priority_score descending; tie-break by risk, file, line."""
+        """Sort by priority_score descending; tie-break by risk, file, line.
+
+        Suppressed findings sort after non-suppressed at equal score.
+        """
         order = {"high": 0, "medium": 1, "low": 2, "info": 3}
 
         def key(f):
             score = getattr(f, "priority_score", 0) or 0
             risk = getattr(f, "quantum_risk", "info")
-            return (-score, order.get(risk, 9), getattr(f, "file", ""), getattr(f, "line", 0) or 0)
+            suppressed = 1 if getattr(f, "suppressed", False) else 0
+            return (
+                suppressed,
+                -score,
+                order.get(risk, 9),
+                getattr(f, "file", ""),
+                getattr(f, "line", 0) or 0,
+            )
 
         ranked = sorted(self.findings, key=key)
         for i, f in enumerate(ranked, start=1):
@@ -157,58 +176,128 @@ def _match_line(rule: Rule, line: str) -> bool:
     return re.search(rule.pattern, line) is not None
 
 
-def scan_file(path: Path, root: Path) -> list[Finding]:
+def _strip_trailing_annotation(line: str) -> str:
+    """Remove trailing ``#|# // pqc-inventory:`` so rule match uses code only."""
+    for marker in ("# pqc-inventory", "// pqc-inventory"):
+        idx = line.find(marker)
+        if idx >= 0:
+            return line[:idx].rstrip()
+    return line
+
+
+def scan_file(path: Path, root: Path) -> tuple[list[Finding], list[OverrideSpec]]:
     language = _language_for(path)
     if not language:
-        return []
+        return [], []
     try:
         text = path.read_text(encoding="utf-8", errors="replace")
     except OSError:
-        return []
+        return [], []
 
     rel = str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
     findings: list[Finding] = []
-    # Dedup: same rule_id + line once
+    overrides: list[OverrideSpec] = []
     seen: set[tuple[str, int]] = set()
+    pending: OverrideSpec | None = None
 
     for lineno, line in enumerate(text.splitlines(), start=1):
         stripped = line.rstrip()
-        if not stripped or stripped.lstrip().startswith("#") and language == "python":
-            if language == "python" and stripped.lstrip().startswith("#"):
-                continue
+        ann = parse_annotation_line(stripped, rel, lineno)
+        if ann is not None:
+            if ann.source == "annotation-file":
+                overrides.append(ann)
+            else:
+                pending = ann
+            continue
+
+        code_part = stripped.lstrip()
+        if language == "python" and code_part.startswith("#"):
+            continue
+        if language == "javascript" and (
+            code_part.startswith("//") or code_part.startswith("/*")
+        ):
+            continue
+
+        match_line = _strip_trailing_annotation(stripped)
+
+        trailing: OverrideSpec | None = None
+        for marker in ("# pqc-inventory:", "// pqc-inventory:"):
+            idx = stripped.find(marker)
+            if idx >= 0:
+                trailing = parse_annotation_line(stripped[idx:], rel, lineno)
+                break
+
+        line_hits: list[Finding] = []
         for rule in _rules_for(language):
-            if not _match_line(rule, stripped):
+            if not _match_line(rule, match_line):
                 continue
             key = (rule.id, lineno)
             if key in seen:
                 continue
             seen.add(key)
-            findings.append(
-                Finding(
-                    rule_id=rule.id,
-                    family=rule.family,
-                    file=rel,
-                    line=lineno,
-                    snippet=stripped.strip()[:200],
-                    quantum_risk=rule.risk,
-                    priority=PRIORITY_BY_RISK[rule.risk],
-                    reason=REASON_BY_RISK[rule.risk],
-                    description=rule.description,
-                    language=language,
-                    rule_ids=[rule.id],
-                    families=[rule.family],
-                )
+            hit = Finding(
+                rule_id=rule.id,
+                family=rule.family,
+                file=rel,
+                line=lineno,
+                snippet=match_line.strip()[:200],
+                quantum_risk=rule.risk,
+                priority=PRIORITY_BY_RISK[rule.risk],
+                reason=REASON_BY_RISK[rule.risk],
+                description=rule.description,
+                language=language,
+                rule_ids=[rule.id],
+                families=[rule.family],
             )
-    return findings
+            line_hits.append(hit)
+
+        if line_hits:
+            if pending is not None:
+                overrides.append(
+                    OverrideSpec(
+                        file=rel,
+                        line=lineno,
+                        data_lifetime_years=pending.data_lifetime_years,
+                        exposure=pending.exposure,
+                        owner=pending.owner,
+                        source="annotation",
+                    )
+                )
+                pending = None
+            if trailing is not None:
+                overrides.append(
+                    OverrideSpec(
+                        file=rel,
+                        line=lineno,
+                        data_lifetime_years=trailing.data_lifetime_years,
+                        exposure=trailing.exposure,
+                        owner=trailing.owner,
+                        source="annotation",
+                    )
+                )
+            findings.extend(line_hits)
+
+    return findings, overrides
 
 
-def scan_directory(target: str | Path, *, merge: bool = True) -> ScanResult:
+def scan_directory(
+    target: str | Path,
+    *,
+    merge: bool = True,
+    extra_overrides: list[OverrideSpec] | None = None,
+    hash_policy: HashPolicy = "downrank",
+) -> ScanResult:
     """Scan *target* path for crypto usage findings.
 
     By default, overlapping same-site hits are merged and priority-scored so
     the prioritized report is readable (not "everything priority 1").
+
+    Explicit lifetime/exposure overrides (annotations / CLI / JSON) are applied
+    before scoring; unoverridden lifetime stays ``None`` (never invented).
+    Local hash/checksum noise is suppressed per *hash_policy*.
     """
     from pqc_inventory.merge import merge_findings
+    from pqc_inventory.overrides import apply_overrides_to_finding
     from pqc_inventory.priority import enrich_finding_priority
 
     root = Path(target).resolve()
@@ -216,19 +305,33 @@ def scan_directory(target: str | Path, *, merge: bool = True) -> ScanResult:
         raise FileNotFoundError(f"Target not found: {root}")
 
     result = ScanResult(target=str(root))
+    scan_root = root if root.is_dir() else root.parent
+    all_annotations: list[OverrideSpec] = []
+
     for path in _iter_source_files(root):
         result.files_scanned += 1
-        result.raw_findings.extend(scan_file(path, root if root.is_dir() else root.parent))
+        hits, anns = scan_file(path, scan_root)
+        result.raw_findings.extend(hits)
+        all_annotations.extend(anns)
+
+    result.annotation_overrides = list(all_annotations)
+    combined_overrides: list[OverrideSpec] = list(all_annotations)
+    if extra_overrides:
+        combined_overrides.extend(extra_overrides)
 
     if merge:
         merged = merge_findings(result.raw_findings)
         for m in merged:
+            apply_overrides_to_finding(m, combined_overrides)
             enrich_finding_priority(m)
         result.findings = merged
     else:
         for f in result.raw_findings:
+            apply_overrides_to_finding(f, combined_overrides)
             enrich_finding_priority(f)
         result.findings = list(result.raw_findings)
+
+    result.findings = apply_hash_suppression(result.findings, policy=hash_policy)
 
     # Assign display ranks
     result.prioritized()
