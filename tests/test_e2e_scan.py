@@ -37,27 +37,37 @@ def test_e2e_sample_scan(tmp_path: Path):
     assert inventory["scope"]["defensive_only"] is True
     assert "static analysis" in inventory["scope"]["analysis"]
     assert "priority_formula" in inventory
+    non_goals = " ".join(inventory["scope"]["non_goals"]).lower()
+    assert "migration" in non_goals
+    assert "lifetime" in non_goals or "guessed" in non_goals
 
     assert inventory["findings"], "expected at least one finding"
+    # Some sample annotations set lifetime/owner; others stay empty/unknown
+    assert any(f.get("data_lifetime_years") is not None for f in inventory["findings"])
+    assert any(f.get("data_lifetime_years") is None for f in inventory["findings"])
     for finding in inventory["findings"]:
         assert "owner" in finding
-        assert finding["owner"] == ""
         assert "data_lifetime_years" in finding
-        assert finding["data_lifetime_years"] is None
         assert "priority_score" in finding
         assert "priority_reason" in finding
         assert "exposure" in finding
         assert "rule_ids" in finding
+        assert "overrides_applied" in finding
+        assert "suppressed" in finding
 
     # Scores should differentiate ranking (not flat priority=1 for all HIGH)
     scores = [f["priority_score"] for f in inventory["findings"]]
-    assert scores == sorted(scores, reverse=True)
+    # Sort order in inventory is prioritized(); suppressed sort last
+    non_sup = [f for f in inventory["findings"] if not f.get("suppressed")]
+    non_scores = [f["priority_score"] for f in non_sup]
+    assert non_scores == sorted(non_scores, reverse=True)
 
     md = md_path.read_text(encoding="utf-8")
     assert "Prioritized findings" in md
     assert "high" in md.lower()
     assert "**Owner**:" in md
-    assert "**Data lifetime (years)**: unknown" in md
+    assert "Data lifetime (years)" in md
+    assert "Overrides applied" in md
     assert "Priority score" in md
     assert "Priority reason" in md
     assert "static analysis of source code" in md
