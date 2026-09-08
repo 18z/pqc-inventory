@@ -1,7 +1,7 @@
 {
   "tool": "pqc-inventory",
   "version": "0.1.0",
-  "generated_at": "2026-09-07T13:37:24.991156+00:00",
+  "generated_at": "2026-09-08T01:30:22.132208+00:00",
   "target": "/workspace/a3-pqc-inventory/samples/vulnerable-app",
   "files_scanned": 4,
   "summary": {
@@ -31,18 +31,52 @@
   },
   "findings": [
     {
-      "rule_id": "js-jose-rsa-ec",
-      "family": "JWT/JOSE",
-      "file": "js_app/crypto_demo.js",
-      "line": 20,
-      "snippet": "const alg = 'RS256';",
+      "rule_id": "py-rsa-crypto",
+      "family": "RSA",
+      "file": "python_app/crypto_demo.py",
+      "line": 14,
+      "snippet": "private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)",
       "quantum_risk": "high",
       "priority": 1,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
+      "description": "cryptography.io RSA API",
+      "language": "python",
+      "owner": "payments",
+      "data_lifetime_years": 15,
+      "rule_ids": [
+        "py-rsa-crypto"
+      ],
+      "families": [
+        "RSA"
+      ],
+      "descriptions": [
+        "cryptography.io RSA API"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "public_key",
+      "priority_score": 152,
+      "priority_reason": "score=152 (risk=high:100 + lifetime 15y (override):30 + exposure=public-key / asymmetric API:22) [exposure override] [lifetime override]",
+      "overrides_applied": {
+        "owner": "annotation",
+        "data_lifetime_years": "annotation",
+        "exposure": "annotation"
+      },
+      "suppressed": false
+    },
+    {
+      "rule_id": "js-jose-rsa-ec",
+      "family": "JWT/JOSE",
+      "file": "js_app/crypto_demo.js",
+      "line": 23,
+      "snippet": "const alg = 'RS256';",
+      "quantum_risk": "high",
+      "priority": 2,
+      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "jose / JWT classical RSA or ECDSA algs",
       "language": "javascript",
-      "owner": "",
-      "data_lifetime_years": null,
+      "owner": "auth",
+      "data_lifetime_years": 10,
       "rule_ids": [
         "js-jose-rsa-ec"
       ],
@@ -56,21 +90,27 @@
       "children": [],
       "exposure": "trust_boundary",
       "priority_score": 150,
-      "priority_reason": "score=150 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)"
+      "priority_reason": "score=150 (risk=high:100 + lifetime 10y (override):20 + exposure=network/TLS/JWT trust boundary:30) [exposure override] [lifetime override]",
+      "overrides_applied": {
+        "owner": "annotation",
+        "data_lifetime_years": "annotation",
+        "exposure": "annotation"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-node-crypto-rsa",
       "family": "RSA",
       "file": "js_app/crypto_demo.js",
-      "line": 7,
+      "line": 9,
       "snippet": "crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });",
       "quantum_risk": "high",
-      "priority": 2,
+      "priority": 3,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto RSA",
       "language": "javascript",
-      "owner": "",
-      "data_lifetime_years": null,
+      "owner": "key-mgmt",
+      "data_lifetime_years": 12,
       "rule_ids": [
         "js-node-crypto-rsa"
       ],
@@ -83,21 +123,27 @@
       "merged_count": 1,
       "children": [],
       "exposure": "public_key",
-      "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_score": 146,
+      "priority_reason": "score=146 (risk=high:100 + lifetime 12y (override):24 + exposure=public-key / asymmetric API:22) [exposure override] [lifetime override]",
+      "overrides_applied": {
+        "owner": "annotation",
+        "data_lifetime_years": "annotation",
+        "exposure": "annotation"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ec",
       "family": "ECDSA/ECDH",
       "file": "js_app/crypto_demo.js",
-      "line": 10,
+      "line": 12,
       "snippet": "crypto.generateKeyPairSync('ec', { namedCurve: 'P-256' });",
       "quantum_risk": "high",
-      "priority": 3,
+      "priority": 4,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto EC / ECDH (+1 overlapping rules)",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-node-crypto-ec",
@@ -116,7 +162,7 @@
           "rule_id": "js-node-crypto-ec",
           "family": "ECDSA/ECDH",
           "file": "js_app/crypto_demo.js",
-          "line": 10,
+          "line": 12,
           "snippet": "crypto.generateKeyPairSync('ec', { namedCurve: 'P-256' });",
           "quantum_risk": "high",
           "description": "Node.js crypto EC / ECDH"
@@ -125,7 +171,7 @@
           "rule_id": "js-webcrypto-ec-alg",
           "family": "ECDSA/ECDH",
           "file": "js_app/crypto_demo.js",
-          "line": 10,
+          "line": 12,
           "snippet": "crypto.generateKeyPairSync('ec', { namedCurve: 'P-256' });",
           "quantum_risk": "high",
           "description": "WebCrypto classical EC curves"
@@ -133,20 +179,24 @@
       ],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ec",
       "family": "ECDSA/ECDH",
       "file": "js_app/crypto_demo.js",
-      "line": 11,
+      "line": 13,
       "snippet": "const ecdh = crypto.createECDH('prime256v1');",
       "quantum_risk": "high",
-      "priority": 4,
+      "priority": 5,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js crypto EC / ECDH",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-node-crypto-ec"
@@ -161,20 +211,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ed",
       "family": "EdDSA",
       "file": "js_app/crypto_demo.js",
-      "line": 14,
+      "line": 16,
       "snippet": "crypto.generateKeyPairSync('ed25519');",
       "quantum_risk": "high",
-      "priority": 5,
+      "priority": 6,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Node.js Ed25519",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-node-crypto-ed"
@@ -189,20 +243,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-forge-rsa",
       "family": "RSA",
       "file": "js_app/crypto_demo.js",
-      "line": 17,
+      "line": 19,
       "snippet": "const keys = forge.pki.rsa.generateKeyPair({ bits: 2048 });",
       "quantum_risk": "high",
-      "priority": 6,
+      "priority": 7,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "node-forge RSA",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-forge-rsa"
@@ -217,20 +275,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-webcrypto-rsa-alg",
       "family": "RSA",
       "file": "js_app/crypto_demo.js",
-      "line": 23,
+      "line": 26,
       "snippet": "const rsaAlg = 'RSA-OAEP';",
       "quantum_risk": "high",
-      "priority": 7,
+      "priority": 8,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "WebCrypto RSA algorithm name",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-webcrypto-rsa-alg"
@@ -245,20 +307,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-webcrypto-ec-alg",
       "family": "ECDSA/ECDH",
       "file": "js_app/crypto_demo.js",
-      "line": 24,
+      "line": 27,
       "snippet": "const ecAlg = { name: 'ECDSA', namedCurve: 'P-256' };",
       "quantum_risk": "high",
-      "priority": 8,
+      "priority": 9,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "WebCrypto classical EC curves",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-webcrypto-ec-alg"
@@ -273,20 +339,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "py-ed25519",
       "family": "EdDSA",
       "file": "python_app/crypto_demo.py",
-      "line": 5,
+      "line": 7,
       "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519",
       "quantum_risk": "high",
-      "priority": 9,
+      "priority": 10,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Ed25519 / EdDSA classical signature (+2 overlapping rules)",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-cryptography-lib",
@@ -309,7 +379,7 @@
           "rule_id": "py-cryptography-lib",
           "family": "cryptography",
           "file": "python_app/crypto_demo.py",
-          "line": 5,
+          "line": 7,
           "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519",
           "quantum_risk": "medium",
           "description": "cryptography package (verify algorithms used)"
@@ -318,7 +388,7 @@
           "rule_id": "py-cryptography-lib",
           "family": "cryptography",
           "file": "python_app/crypto_demo.py",
-          "line": 6,
+          "line": 8,
           "snippet": "from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes",
           "quantum_risk": "medium",
           "description": "cryptography package (verify algorithms used)"
@@ -327,7 +397,7 @@
           "rule_id": "py-ed25519",
           "family": "EdDSA",
           "file": "python_app/crypto_demo.py",
-          "line": 5,
+          "line": 7,
           "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519",
           "quantum_risk": "high",
           "description": "Ed25519 / EdDSA classical signature"
@@ -336,7 +406,7 @@
           "rule_id": "py-rsa-module",
           "family": "RSA",
           "file": "python_app/crypto_demo.py",
-          "line": 5,
+          "line": 7,
           "snippet": "from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519",
           "quantum_risk": "high",
           "description": "python-rsa / rsa package import"
@@ -344,20 +414,24 @@
       ],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "py-ecdsa",
       "family": "ECDSA",
       "file": "python_app/crypto_demo.py",
-      "line": 7,
+      "line": 9,
       "snippet": "import ecdsa",
       "quantum_risk": "high",
-      "priority": 10,
+      "priority": 11,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "python-ecdsa classical signatures",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-ecdsa"
@@ -372,76 +446,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
-    },
-    {
-      "rule_id": "py-rsa-crypto",
-      "family": "RSA",
-      "file": "python_app/crypto_demo.py",
-      "line": 10,
-      "snippet": "private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)",
-      "quantum_risk": "high",
-      "priority": 11,
-      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
-      "description": "cryptography.io RSA API",
-      "language": "python",
-      "owner": "",
-      "data_lifetime_years": null,
-      "rule_ids": [
-        "py-rsa-crypto"
-      ],
-      "families": [
-        "RSA"
-      ],
-      "descriptions": [
-        "cryptography.io RSA API"
-      ],
-      "merged_count": 1,
-      "children": [],
-      "exposure": "public_key",
-      "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
-    },
-    {
-      "rule_id": "py-ec-crypto",
-      "family": "ECDSA/ECDH",
-      "file": "python_app/crypto_demo.py",
-      "line": 13,
-      "snippet": "ec_key = ec.generate_private_key(ec.SECP256R1())",
-      "quantum_risk": "high",
-      "priority": 12,
-      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
-      "description": "cryptography.io elliptic-curve API",
-      "language": "python",
-      "owner": "",
-      "data_lifetime_years": null,
-      "rule_ids": [
-        "py-ec-crypto"
-      ],
-      "families": [
-        "ECDSA/ECDH"
-      ],
-      "descriptions": [
-        "cryptography.io elliptic-curve API"
-      ],
-      "merged_count": 1,
-      "children": [],
-      "exposure": "public_key",
-      "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "py-ed25519",
       "family": "EdDSA",
       "file": "python_app/crypto_demo.py",
-      "line": 16,
+      "line": 21,
       "snippet": "ed_key = ed25519.Ed25519PrivateKey.generate()",
       "quantum_risk": "high",
-      "priority": 13,
+      "priority": 12,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "Ed25519 / EdDSA classical signature",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-ed25519"
@@ -456,20 +478,24 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "py-ecdsa",
       "family": "ECDSA",
       "file": "python_app/crypto_demo.py",
-      "line": 19,
+      "line": 24,
       "snippet": "sk = ecdsa.SigningKey.generate(curve=ecdsa.NIST256p)",
       "quantum_risk": "high",
-      "priority": 14,
+      "priority": 13,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "python-ecdsa classical signatures",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-ecdsa"
@@ -484,7 +510,11 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "dep-ecdsa",
@@ -493,7 +523,7 @@
       "line": 2,
       "snippet": "ecdsa>=0.18.0",
       "quantum_risk": "high",
-      "priority": 15,
+      "priority": 14,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "ecdsa package dependency",
       "language": "manifest",
@@ -512,7 +542,9 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {},
+      "suppressed": false
     },
     {
       "rule_id": "dep-rsa",
@@ -521,7 +553,7 @@
       "line": 3,
       "snippet": "rsa>=4.9",
       "quantum_risk": "high",
-      "priority": 16,
+      "priority": 15,
       "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
       "description": "rsa package dependency",
       "language": "manifest",
@@ -540,7 +572,43 @@
       "children": [],
       "exposure": "public_key",
       "priority_score": 142,
-      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)"
+      "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
+      "overrides_applied": {},
+      "suppressed": false
+    },
+    {
+      "rule_id": "py-ec-crypto",
+      "family": "ECDSA/ECDH",
+      "file": "python_app/crypto_demo.py",
+      "line": 18,
+      "snippet": "ec_key = ec.generate_private_key(ec.SECP256R1())",
+      "quantum_risk": "high",
+      "priority": 16,
+      "reason": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust.",
+      "description": "cryptography.io elliptic-curve API",
+      "language": "python",
+      "owner": "sample-python-team",
+      "data_lifetime_years": 8,
+      "rule_ids": [
+        "py-ec-crypto"
+      ],
+      "families": [
+        "ECDSA/ECDH"
+      ],
+      "descriptions": [
+        "cryptography.io elliptic-curve API"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "public_key",
+      "priority_score": 138,
+      "priority_reason": "score=138 (risk=high:100 + lifetime 8y (override):16 + exposure=public-key / asymmetric API:22) [exposure override] [lifetime override]",
+      "overrides_applied": {
+        "owner": "annotation-file",
+        "data_lifetime_years": "annotation",
+        "exposure": "annotation"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "dep-jose",
@@ -568,20 +636,22 @@
       "children": [],
       "exposure": "trust_boundary",
       "priority_score": 90,
-      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)"
+      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
+      "overrides_applied": {},
+      "suppressed": false
     },
     {
       "rule_id": "py-ssl",
       "family": "TLS/SSL",
       "file": "python_app/crypto_demo.py",
-      "line": 4,
+      "line": 6,
       "snippet": "import ssl",
       "quantum_risk": "medium",
       "priority": 18,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "stdlib ssl / TLS wrapper (check cipher suites)",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-ssl"
@@ -596,35 +666,11 @@
       "children": [],
       "exposure": "trust_boundary",
       "priority_score": 90,
-      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)"
-    },
-    {
-      "rule_id": "py-ssl",
-      "family": "TLS/SSL",
-      "file": "python_app/crypto_demo.py",
-      "line": 22,
-      "snippet": "ctx = ssl.create_default_context()",
-      "quantum_risk": "medium",
-      "priority": 19,
-      "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
-      "description": "stdlib ssl / TLS wrapper (check cipher suites)",
-      "language": "python",
-      "owner": "",
-      "data_lifetime_years": null,
-      "rule_ids": [
-        "py-ssl"
-      ],
-      "families": [
-        "TLS/SSL"
-      ],
-      "descriptions": [
-        "stdlib ssl / TLS wrapper (check cipher suites)"
-      ],
-      "merged_count": 1,
-      "children": [],
-      "exposure": "trust_boundary",
-      "priority_score": 90,
-      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)"
+      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "dep-pyjwt",
@@ -633,7 +679,7 @@
       "line": 5,
       "snippet": "PyJWT>=2.8.0",
       "quantum_risk": "medium",
-      "priority": 20,
+      "priority": 19,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "PyJWT dependency",
       "language": "manifest",
@@ -652,20 +698,56 @@
       "children": [],
       "exposure": "trust_boundary",
       "priority_score": 90,
-      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)"
+      "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
+      "overrides_applied": {},
+      "suppressed": false
+    },
+    {
+      "rule_id": "py-ssl",
+      "family": "TLS/SSL",
+      "file": "python_app/crypto_demo.py",
+      "line": 28,
+      "snippet": "ctx = ssl.create_default_context()",
+      "quantum_risk": "medium",
+      "priority": 20,
+      "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
+      "description": "stdlib ssl / TLS wrapper (check cipher suites)",
+      "language": "python",
+      "owner": "edge-tls",
+      "data_lifetime_years": 5,
+      "rule_ids": [
+        "py-ssl"
+      ],
+      "families": [
+        "TLS/SSL"
+      ],
+      "descriptions": [
+        "stdlib ssl / TLS wrapper (check cipher suites)"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "trust_boundary",
+      "priority_score": 80,
+      "priority_reason": "score=80 (risk=medium:40 + lifetime 5y (override):10 + exposure=network/TLS/JWT trust boundary:30) [exposure override] [lifetime override]",
+      "overrides_applied": {
+        "owner": "annotation",
+        "data_lifetime_years": "annotation",
+        "exposure": "annotation"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-node-crypto-require",
       "family": "node:crypto",
       "file": "js_app/crypto_demo.js",
-      "line": 2,
+      "line": 3,
       "snippet": "const crypto = require('crypto');",
       "quantum_risk": "medium",
       "priority": 21,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "Node crypto module import",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-node-crypto-require"
@@ -680,20 +762,24 @@
       "children": [],
       "exposure": "library_import",
       "priority_score": 72,
-      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)"
+      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-forge-import",
       "family": "node-forge",
       "file": "js_app/crypto_demo.js",
-      "line": 3,
+      "line": 4,
       "snippet": "const forge = require('node-forge');",
       "quantum_risk": "medium",
       "priority": 22,
       "reason": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness.",
       "description": "node-forge import",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-forge-import"
@@ -708,7 +794,11 @@
       "children": [],
       "exposure": "library_import",
       "priority_score": 72,
-      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)"
+      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "dep-node-forge",
@@ -736,7 +826,9 @@
       "children": [],
       "exposure": "library_import",
       "priority_score": 72,
-      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)"
+      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {},
+      "suppressed": false
     },
     {
       "rule_id": "dep-cryptography",
@@ -764,7 +856,9 @@
       "children": [],
       "exposure": "library_import",
       "priority_score": 72,
-      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)"
+      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {},
+      "suppressed": false
     },
     {
       "rule_id": "dep-pycryptodome",
@@ -792,20 +886,22 @@
       "children": [],
       "exposure": "library_import",
       "priority_score": 72,
-      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)"
+      "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {},
+      "suppressed": false
     },
     {
       "rule_id": "js-aes",
       "family": "AES",
       "file": "js_app/crypto_demo.js",
-      "line": 27,
+      "line": 30,
       "snippet": "const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.alloc(32), Buffer.alloc(12));",
       "quantum_risk": "low",
       "priority": 26,
       "reason": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys.",
       "description": "AES symmetric encryption",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-aes"
@@ -820,20 +916,24 @@
       "children": [],
       "exposure": "symmetric",
       "priority_score": 41,
-      "priority_reason": "score=41 (risk=low:15 + lifetime unknown→mid(+unknown penalty):20 + exposure=local symmetric cipher:6)"
+      "priority_reason": "score=41 (risk=low:15 + lifetime unknown→mid(+unknown penalty):20 + exposure=local symmetric cipher:6)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "py-aes",
       "family": "AES",
       "file": "python_app/crypto_demo.py",
-      "line": 25,
+      "line": 31,
       "snippet": "aes_cipher = Cipher(algorithms.AES(b\"0\" * 32), modes.ECB())",
       "quantum_risk": "low",
       "priority": 27,
       "reason": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys.",
       "description": "AES symmetric encryption",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-aes"
@@ -848,20 +948,24 @@
       "children": [],
       "exposure": "symmetric",
       "priority_score": 41,
-      "priority_reason": "score=41 (risk=low:15 + lifetime unknown→mid(+unknown penalty):20 + exposure=local symmetric cipher:6)"
+      "priority_reason": "score=41 (risk=low:15 + lifetime unknown→mid(+unknown penalty):20 + exposure=local symmetric cipher:6)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": false
     },
     {
       "rule_id": "js-hash",
       "family": "SHA/Hash",
       "file": "js_app/crypto_demo.js",
-      "line": 30,
+      "line": 33,
       "snippet": "const hash = crypto.createHash('sha256').update('demo').digest('hex');",
       "quantum_risk": "info",
       "priority": 28,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "SHA hash / integrity",
       "language": "javascript",
-      "owner": "",
+      "owner": "sample-js-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "js-hash"
@@ -875,21 +979,25 @@
       "merged_count": 1,
       "children": [],
       "exposure": "hash_local",
-      "priority_score": 27,
-      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2)"
+      "priority_score": 8,
+      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2); hash/checksum suppressed (downrank cap=8)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": true
     },
     {
       "rule_id": "py-hashlib",
       "family": "SHA/Hash",
       "file": "python_app/crypto_demo.py",
-      "line": 3,
+      "line": 5,
       "snippet": "import hashlib",
       "quantum_risk": "info",
       "priority": 29,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-hashlib"
@@ -903,21 +1011,25 @@
       "merged_count": 1,
       "children": [],
       "exposure": "hash_local",
-      "priority_score": 27,
-      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2)"
+      "priority_score": 8,
+      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2); hash/checksum suppressed (downrank cap=8)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": true
     },
     {
       "rule_id": "py-hashlib",
       "family": "SHA/Hash",
       "file": "python_app/crypto_demo.py",
-      "line": 28,
+      "line": 34,
       "snippet": "digest = hashlib.sha256(b\"demo\").hexdigest()",
       "quantum_risk": "info",
       "priority": 30,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",
-      "owner": "",
+      "owner": "sample-python-team",
       "data_lifetime_years": null,
       "rule_ids": [
         "py-hashlib"
@@ -931,8 +1043,12 @@
       "merged_count": 1,
       "children": [],
       "exposure": "hash_local",
-      "priority_score": 27,
-      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2)"
+      "priority_score": 8,
+      "priority_reason": "score=27 (risk=info:5 + lifetime unknown→mid(+unknown penalty):20 + exposure=local hash / integrity helper:2); hash/checksum suppressed (downrank cap=8)",
+      "overrides_applied": {
+        "owner": "annotation-file"
+      },
+      "suppressed": true
     }
   ],
   "scope": {
@@ -941,7 +1057,9 @@
     "non_goals": [
       "No attack tools or exploits",
       "No key-breaking or cryptanalysis",
-      "No automatic migration / re-encryption engine"
+      "No automatic migration / re-encryption engine",
+      "No guessed data lifetime or sensitivity (explicit overrides only)",
+      "Static source code + dependency manifests only"
     ]
   },
   "priority_formula": {

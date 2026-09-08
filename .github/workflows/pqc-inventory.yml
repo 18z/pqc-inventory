@@ -1,0 +1,37 @@
+# Minimal CI example: run defensive pqc-inventory scan and fail on HIGH findings.
+# Scope: static source + dependency manifests only. No migration / attack tooling.
+name: pqc-inventory
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pqc-inventory
+        run: pip install -e ".[dev]"
+
+      - name: Scan (fail on high-risk findings)
+        run: |
+          mkdir -p out
+          pqc-inventory scan samples/vulnerable-app \
+            --out out \
+            --hash-policy downrank \
+            --fail-on high
+
+      # Optional: upload inventory artifacts for triage
+      - name: Upload inventory artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pqc-inventory-out
+          path: out/

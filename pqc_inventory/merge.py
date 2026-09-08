@@ -77,6 +77,8 @@ class MergedFinding:
     exposure: str = ""
     priority_score: int = 0
     priority_reason: str = ""
+    overrides_applied: dict = field(default_factory=dict)
+    suppressed: bool = False
 
     def to_dict(self) -> dict:
         return asdict(self)

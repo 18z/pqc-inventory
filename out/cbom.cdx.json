@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:c51d3376-0e36-4496-9c74-3615110471db",
+  "serialNumber": "urn:uuid:c7e5bec9-4b03-4357-ba8e-186ae99b5c16",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-07T13:37:24.993003+00:00",
+    "timestamp": "2026-09-08T01:30:22.133713+00:00",
     "tools": {
       "components": [
         {
@@ -50,14 +50,14 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 27,
+            "line": 30,
             "rule_ids": [
               "js-aes"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 25,
+            "line": 31,
             "rule_ids": [
               "py-aes"
             ]
@@ -88,14 +88,14 @@
         "occurrences": [
           {
             "location": "python_app/crypto_demo.py",
-            "line": 7,
+            "line": 9,
             "rule_ids": [
               "py-ecdsa"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 19,
+            "line": 24,
             "rule_ids": [
               "py-ecdsa"
             ]
@@ -133,7 +133,7 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 10,
+            "line": 12,
             "rule_ids": [
               "js-node-crypto-ec",
               "js-webcrypto-ec-alg"
@@ -141,21 +141,21 @@
           },
           {
             "location": "js_app/crypto_demo.js",
-            "line": 11,
+            "line": 13,
             "rule_ids": [
               "js-node-crypto-ec"
             ]
           },
           {
             "location": "js_app/crypto_demo.js",
-            "line": 24,
+            "line": 27,
             "rule_ids": [
               "js-webcrypto-ec-alg"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 13,
+            "line": 18,
             "rule_ids": [
               "py-ec-crypto"
             ]
@@ -186,14 +186,14 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 14,
+            "line": 16,
             "rule_ids": [
               "js-node-crypto-ed"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 5,
+            "line": 7,
             "rule_ids": [
               "py-cryptography-lib",
               "py-ed25519",
@@ -202,7 +202,7 @@
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 16,
+            "line": 21,
             "rule_ids": [
               "py-ed25519"
             ]
@@ -262,7 +262,7 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 20,
+            "line": 23,
             "rule_ids": [
               "js-jose-rsa-ec"
             ]
@@ -328,40 +328,40 @@
       "evidence": {
         "occurrences": [
           {
+            "location": "python_app/crypto_demo.py",
+            "line": 14,
+            "rule_ids": [
+              "py-rsa-crypto"
+            ]
+          },
+          {
             "location": "js_app/crypto_demo.js",
-            "line": 7,
+            "line": 9,
             "rule_ids": [
               "js-node-crypto-rsa"
             ]
           },
           {
             "location": "js_app/crypto_demo.js",
-            "line": 17,
+            "line": 19,
             "rule_ids": [
               "js-forge-rsa"
             ]
           },
           {
             "location": "js_app/crypto_demo.js",
-            "line": 23,
+            "line": 26,
             "rule_ids": [
               "js-webcrypto-rsa-alg"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 5,
+            "line": 7,
             "rule_ids": [
               "py-cryptography-lib",
               "py-ed25519",
               "py-rsa-module"
-            ]
-          },
-          {
-            "location": "python_app/crypto_demo.py",
-            "line": 10,
-            "rule_ids": [
-              "py-rsa-crypto"
             ]
           },
           {
@@ -395,21 +395,21 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 30,
+            "line": 33,
             "rule_ids": [
               "js-hash"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 3,
+            "line": 5,
             "rule_ids": [
               "py-hashlib"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 28,
+            "line": 34,
             "rule_ids": [
               "py-hashlib"
             ]
@@ -439,14 +439,14 @@
         "occurrences": [
           {
             "location": "python_app/crypto_demo.py",
-            "line": 4,
+            "line": 6,
             "rule_ids": [
               "py-ssl"
             ]
           },
           {
             "location": "python_app/crypto_demo.py",
-            "line": 22,
+            "line": 28,
             "rule_ids": [
               "py-ssl"
             ]
@@ -475,7 +475,7 @@
         "occurrences": [
           {
             "location": "python_app/crypto_demo.py",
-            "line": 5,
+            "line": 7,
             "rule_ids": [
               "py-cryptography-lib",
               "py-ed25519",
@@ -513,7 +513,7 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 3,
+            "line": 4,
             "rule_ids": [
               "js-forge-import"
             ]
@@ -549,7 +549,7 @@
         "occurrences": [
           {
             "location": "js_app/crypto_demo.js",
-            "line": 2,
+            "line": 3,
             "rule_ids": [
               "js-node-crypto-require"
             ]

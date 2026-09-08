@@ -8,11 +8,11 @@ risk_points:
     high=100, medium=40, low=15, info=5
 
 lifetime_points:
-    - known years: min(50, round(data_lifetime_years * 2))
+    - known years (explicit override only): min(50, round(data_lifetime_years * 2))
     - null / unknown: 20  (conservative mid + explicit unknown penalty;
-      documented so triage still works before owners fill lifetimes)
+      field itself stays null — never invent a lifetime value)
 
-exposure_points (heuristic from family / language / snippet):
+exposure_points (heuristic from family / language / snippet, unless overridden):
     trust_boundary (TLS/SSL, JWT/JOSE, JWT):     30
     public_key     (RSA, ECDSA*, EdDSA, DH, WebCrypto): 22
     library_import (cryptography, node:crypto, forge, PyCryptodome deps): 12
@@ -36,6 +36,7 @@ RISK_POINTS: dict[str, int] = {
 }
 
 # Null lifetime → conservative mid (≈10y * 2) with a small unknown penalty baked in.
+# The finding field stays None; only the score component uses this constant.
 UNKNOWN_LIFETIME_POINTS = 20
 LIFETIME_POINTS_CAP = 50
 
@@ -129,7 +130,7 @@ def classify_exposure(
 
 
 def lifetime_points(data_lifetime_years: int | float | None) -> tuple[int, str]:
-    """Return (points, short note). Null → conservative mid / unknown penalty."""
+    """Return (points, short note). Null → score mid; field stays unknown."""
     if data_lifetime_years is None:
         return UNKNOWN_LIFETIME_POINTS, "lifetime unknown→mid(+unknown penalty)"
     try:
@@ -137,7 +138,7 @@ def lifetime_points(data_lifetime_years: int | float | None) -> tuple[int, str]:
     except (TypeError, ValueError):
         return UNKNOWN_LIFETIME_POINTS, "lifetime unknown→mid(+unknown penalty)"
     pts = min(LIFETIME_POINTS_CAP, int(round(years * 2)))
-    return pts, f"lifetime {years:g}y"
+    return pts, f"lifetime {years:g}y (override)"
 
 
 def compute_priority_score(
@@ -159,19 +160,34 @@ def compute_priority_score(
 
 
 def enrich_finding_priority(finding: Any) -> None:
-    """Mutate a Finding (or MergedFinding) with exposure, priority_score, priority_reason."""
-    families = getattr(finding, "families", None) or [finding.family]
-    exposure = classify_exposure(
-        finding.family,
-        language=getattr(finding, "language", "") or "",
-        snippet=getattr(finding, "snippet", "") or "",
-        families=list(families),
-    )
+    """Mutate a Finding (or MergedFinding) with exposure, priority_score, priority_reason.
+
+    If ``exposure`` was already set by an explicit override, keep it.
+    Never invent ``data_lifetime_years`` — leave None when not overridden.
+    """
+    overrides = getattr(finding, "overrides_applied", None) or {}
+    exposure_overridden = "exposure" in overrides and bool(getattr(finding, "exposure", ""))
+
+    if not exposure_overridden:
+        families = getattr(finding, "families", None) or [finding.family]
+        exposure = classify_exposure(
+            finding.family,
+            language=getattr(finding, "language", "") or "",
+            snippet=getattr(finding, "snippet", "") or "",
+            families=list(families),
+        )
+        finding.exposure = exposure
+    else:
+        exposure = finding.exposure
+
     score, reason = compute_priority_score(
         finding.quantum_risk,
         getattr(finding, "data_lifetime_years", None),
         exposure,
     )
-    finding.exposure = exposure
+    if exposure_overridden:
+        reason = f"{reason} [exposure override]"
+    if "data_lifetime_years" in overrides:
+        reason = f"{reason} [lifetime override]"
     finding.priority_score = score
     finding.priority_reason = reason
