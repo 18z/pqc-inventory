@@ -28,9 +28,15 @@ Open these three files:
 ## What it looks at
 
 Source code and dependency manifests only (Python / JS / `requirements.txt`, `package.json`, and similar).
+**Not** runtime, binaries, network traffic, negotiated TLS, or a complete estate CBOM — and it does not promise zero misses.
 
-Not runtime, binaries, or network traffic. It does not cover a whole environment, and it does not promise zero misses.
-This is a static scan of source code and dependency manifests only, not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM).
+## Planning references (not certification)
+
+CBOM `metadata.properties` include EO 14412 / CNSA 2.0 / NIST IR 8547 **timeline references** for downstream planning. The tool does **not** certify compliance.
+
+## Feedback
+
+Public repo — please use [Feedback wanted](https://github.com/18z/pqc-inventory/issues/2) or [FEEDBACK.md](FEEDBACK.md).
 
 ## How risk is ranked
 

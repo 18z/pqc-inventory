@@ -29,6 +29,7 @@ Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`
 ## Rules
 
 - Scope is source + dependency manifests only. Do not claim runtime, binary, or full-estate coverage.
+- CBOM may include `pqc-inventory:ref:*` planning references (EO 14412 / CNSA / NIST IR 8547). Never claim the scan certifies compliance.
 - Never invent `data_lifetime_years` or sensitivity. Leave unknown unless the user sets an override.
 - Overrides: `--set-lifetime 'path:line=15'`, `--set-exposure`, `--set-owner`, or a line comment `# pqc-inventory: lifetime=15 exposure=public_key owner=team`.
 - Hash/checksum noise: default `--hash-policy downrank`. Use `drop` to omit, `keep` to keep.

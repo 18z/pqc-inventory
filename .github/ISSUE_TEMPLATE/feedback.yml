@@ -1,0 +1,30 @@
+name: Product feedback
+description: Tell us what worked, what was noisy, or what you need for PQC inventory / CBOM
+title: "[feedback] "
+labels: ["feedback"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of feedback?
+      options:
+        - False positive / noise
+        - Missed crypto asset
+        - CBOM / CycloneDX shape
+        - Priority score / lifetime overrides
+        - CI / exit codes
+        - Docs / README
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: What you expected vs what you saw. Sample snippet OK if non-sensitive.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: pqc-inventory version or commit (if known)

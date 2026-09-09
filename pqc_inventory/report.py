@@ -13,10 +13,25 @@ from pqc_inventory.scanner import ScanResult
 
 SCOPE_BANNER = (
     "**Scope:** This is a **static scan of source code and dependency manifests only**, "
-    "**not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM). "
-    "static analysis of source code + dependency manifests only — "
-    "not runtime, binaries, network traffic, or a complete coverage guarantee."
+    "**not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM)."
 )
+
+PLANNING_REFS = """
+## Planning references (not certification)
+
+These are **planning references only**. This tool does **not** certify compliance with
+EO 14412, CNSA 2.0, NIST IR 8547, or any other mandate.
+
+| Reference | Note |
+|-----------|------|
+| EO 14412 CBOM minimum elements | CISA + NIST public guidance due ~270 days after 2026-06-22 (≈ 2027-03) |
+| EO 14412 PQC key establishment | HVA / high-impact systems target **2030-12-31** |
+| EO 14412 PQC digital signatures | HVA / high-impact systems target **2031-12-31** |
+| NSA CNSA 2.0 | Migration planning reference |
+| NIST IR 8547 | Transition planning reference |
+
+CBOM `metadata.properties` repeats these under `pqc-inventory:ref:*` for downstream tooling.
+""".strip()
 
 NEXT_STEPS = """
 ## Plain-language next steps (for compliance / crypto owners)
@@ -57,9 +72,7 @@ def build_inventory(result: ScanResult) -> dict:
             "defensive_only": True,
             "analysis": (
                 "static scan of source code and dependency manifests only, "
-                "not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM). "
-                "static analysis of source code + dependency manifests only — "
-                "not runtime, binaries, network traffic, or complete coverage guarantee"
+                "not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM)"
             ),
             "non_goals": [
                 "No attack tools or exploits",
@@ -181,6 +194,7 @@ def render_markdown(inventory: dict) -> str:
             ]
 
     lines += ["", NEXT_STEPS, ""]
+    lines += ["", PLANNING_REFS, ""]
     lines += [
         "## Quantum-risk legend",
         "",

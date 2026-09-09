@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from pqc_inventory.report import SCOPE_BANNER, write_outputs
+from pqc_inventory.report import write_outputs
 from pqc_inventory.scanner import scan_directory
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +35,7 @@ def test_e2e_sample_scan(tmp_path: Path):
     inventory = json.loads(json_path.read_text(encoding="utf-8"))
     assert inventory["summary"]["total_findings"] == len(result.findings)
     assert inventory["scope"]["defensive_only"] is True
-    assert "static analysis" in inventory["scope"]["analysis"]
+    assert "static scan" in inventory["scope"]["analysis"]
     assert "not runtime" in inventory["scope"]["analysis"]
     applied = inventory["overrides_applied"]
     assert applied["count"] == len(applied["items"])
@@ -75,14 +75,21 @@ def test_e2e_sample_scan(tmp_path: Path):
     assert "Overrides applied" in md
     assert "Priority score" in md
     assert "Priority reason" in md
-    assert "static analysis of source code" in md
-    assert SCOPE_BANNER.split("—")[0].strip("* ") in md or "static analysis" in md
+    assert "static scan of source code and dependency manifests only" in md
     # Banner sits immediately after the title and says this is not runtime.
     assert md.startswith("# PQC Cryptographic Asset Inventory Report\n\n> ")
     assert "**not runtime**" in md
     assert "negotiated TLS" in md
     assert "complete CBOM" in md
-    assert "static scan of source code and dependency manifests only" in md
+    # No duplicate scope tail (regression for 2026-09-09 banner cleanup)
+    assert md.count("static scan of source code and dependency manifests only") == 2  # header + scope reminder
+    assert "static analysis of source code + dependency manifests only —" not in md
+    assert "Planning references (not certification)" in md
+    assert "does **not** certify compliance" in md
+
+    analysis = inventory["scope"]["analysis"]
+    assert analysis.count("static") == 1
+    assert "complete coverage guarantee" not in analysis
 
     cbom = json.loads(cbom_path.read_text(encoding="utf-8"))
     assert cbom["bomFormat"] == "CycloneDX"
@@ -91,3 +98,15 @@ def test_e2e_sample_scan(tmp_path: Path):
     assert cbom["components"], "expected at least one crypto component"
     assert cbom["components"][0]["type"] == "cryptographic-asset"
     assert "cryptoProperties" in cbom["components"][0]
+    props = {p["name"]: p["value"] for p in cbom["metadata"]["properties"]}
+    assert "pqc-inventory:scope" in props
+    assert "pqc-inventory:compliance-note" in props
+    assert "does not certify" in props["pqc-inventory:compliance-note"]
+    for key in (
+        "pqc-inventory:ref:eo-14412-cbom-min-elements",
+        "pqc-inventory:ref:eo-14412-pqc-key-est",
+        "pqc-inventory:ref:eo-14412-pqc-signatures",
+        "pqc-inventory:ref:cnsa-2.0",
+        "pqc-inventory:ref:nist-ir-8547",
+    ):
+        assert key in props, key

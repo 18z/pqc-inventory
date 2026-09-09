@@ -216,7 +216,37 @@ def build_cbom(
                         "static analysis of source code + dependency manifests only; "
                         "not runtime, binaries, network traffic, or complete coverage"
                     ),
-                }
+                },
+                {
+                    "name": "pqc-inventory:compliance-note",
+                    "value": (
+                        "Planning references only; pqc-inventory does not certify "
+                        "compliance with EO 14412, CNSA 2.0, NIST IR 8547, or any mandate"
+                    ),
+                },
+                {
+                    "name": "pqc-inventory:ref:eo-14412-cbom-min-elements",
+                    "value": (
+                        "CISA+NIST CBOM minimum elements guidance due ~270 days after "
+                        "EO 14412 (2026-06-22) ≈ 2027-03; not finalized at emit time"
+                    ),
+                },
+                {
+                    "name": "pqc-inventory:ref:eo-14412-pqc-key-est",
+                    "value": "HVA/high-impact PQC key establishment target 2030-12-31",
+                },
+                {
+                    "name": "pqc-inventory:ref:eo-14412-pqc-signatures",
+                    "value": "HVA/high-impact PQC digital signatures target 2031-12-31",
+                },
+                {
+                    "name": "pqc-inventory:ref:cnsa-2.0",
+                    "value": "NSA CNSA 2.0 — planning reference only",
+                },
+                {
+                    "name": "pqc-inventory:ref:nist-ir-8547",
+                    "value": "NIST IR 8547 — planning reference only",
+                },
             ],
         },
         "components": components,
