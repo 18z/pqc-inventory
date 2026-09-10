@@ -37,7 +37,9 @@ CBOM `metadata.properties` include EO 14412 / CNSA 2.0 / NIST IR 8547 **timeline
 
 ## Feedback
 
-Public repo — please use [Feedback wanted](https://github.com/18z/pqc-inventory/issues/2) or [FEEDBACK.md](FEEDBACK.md).
+- Waitlist (comment to try it on a real repo): https://github.com/18z/pqc-inventory/discussions/4
+- Feedback issue: https://github.com/18z/pqc-inventory/issues/2
+- Details: [FEEDBACK.md](FEEDBACK.md)
 
 ## How risk is ranked
 

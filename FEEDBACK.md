@@ -16,3 +16,7 @@
 - Whether lifetime/exposure overrides match how you work
 
 Please do not paste secrets, private keys, or proprietary source.
+
+## Waitlist
+
+Comment on https://github.com/18z/pqc-inventory/discussions/4 if you will run a scan on a real repo and report what was useful or noisy.
