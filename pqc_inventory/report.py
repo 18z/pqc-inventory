@@ -1,4 +1,4 @@
-"""Generate inventory.json, report.md, and cbom.cdx.json from scan results."""
+"""Generate inventory.json, report.md, cbom.cdx.json, and results.sarif."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from pathlib import Path
 
 from pqc_inventory import __version__
 from pqc_inventory.cbom import build_cbom
+from pqc_inventory.sarif import build_sarif
 from pqc_inventory.overrides import summarize_overrides_applied
 from pqc_inventory.scanner import ScanResult
 
@@ -214,17 +215,21 @@ def render_markdown(inventory: dict) -> str:
     return "\n".join(lines)
 
 
-def write_outputs(result: ScanResult, out_dir: str | Path) -> tuple[Path, Path, Path]:
+def write_outputs(result: ScanResult, out_dir: str | Path) -> tuple[Path, Path, Path, Path]:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     inventory = build_inventory(result)
     json_path = out / "inventory.json"
     md_path = out / "report.md"
     cbom_path = out / "cbom.cdx.json"
+    sarif_path = out / "results.sarif"
 
     json_path.write_text(json.dumps(inventory, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     md_path.write_text(render_markdown(inventory), encoding="utf-8")
 
     cbom = build_cbom(target=result.target, findings=result.prioritized())
     cbom_path.write_text(json.dumps(cbom, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    return json_path, md_path, cbom_path
+
+    sarif = build_sarif(result)
+    sarif_path.write_text(json.dumps(sarif, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return json_path, md_path, cbom_path, sarif_path

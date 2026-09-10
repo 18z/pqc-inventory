@@ -64,7 +64,7 @@ def test_sample_annotations_apply_and_spread_scores(tmp_path: Path):
     scores = {f.priority_score for f in result.findings}
     assert len(scores) >= 3, "overrides should help spread priority scores"
 
-    json_path, md_path, _ = write_outputs(result, tmp_path / "out")
+    json_path, md_path, _, _ = write_outputs(result, tmp_path / "out")
     inventory = json.loads(json_path.read_text(encoding="utf-8"))
     assert any(
         f.get("data_lifetime_years") is not None for f in inventory["findings"]
@@ -135,7 +135,7 @@ def test_overrides_json_file(tmp_path: Path):
 
 def test_inventory_overrides_applied_summary_matches_findings(tmp_path: Path):
     result = scan_directory(SAMPLE, hash_policy="keep")
-    json_path, _, _ = write_outputs(result, tmp_path / "out")
+    json_path, _, _, _ = write_outputs(result, tmp_path / "out")
     inventory = json.loads(json_path.read_text(encoding="utf-8"))
     summary = inventory["overrides_applied"]
     assert set(summary) >= {"count", "sources", "items"}
@@ -181,7 +181,7 @@ def test_overrides_applied_summary_empty_when_none(tmp_path: Path):
     assert result.overrides_applied_summary["count"] == 0
     assert result.overrides_applied_summary["sources"] == []
     assert result.overrides_applied_summary["items"] == []
-    json_path, _, _ = write_outputs(result, tmp_path / "out")
+    json_path, _, _, _ = write_outputs(result, tmp_path / "out")
     inventory = json.loads(json_path.read_text(encoding="utf-8"))
     assert inventory["overrides_applied"]["count"] == 0
     assert inventory["overrides_applied"]["items"] == []

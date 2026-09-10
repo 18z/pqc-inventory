@@ -17,13 +17,14 @@ python3 -m venv .venv
 .venv/bin/python -m pqc_inventory scan samples/vulnerable-app --out ./out
 ```
 
-Open these three files:
+Open these output files:
 
 | File | Who it is for |
 |------|----------------|
 | `out/report.md` | People: priority order and next steps |
 | `out/inventory.json` | Programs: details for each hit |
 | `out/cbom.cdx.json` | Machine-readable crypto list (CycloneDX CBOM) |
+| `out/results.sarif` | GitHub code scanning / SARIF 2.1.0 consumers |
 
 ## What it looks at
 
@@ -72,6 +73,18 @@ pqc-inventory scan PATH --out ./out --fail-on high
 | 0 | Passed |
 | 1 | Over the threshold |
 | 2 | Bad path or arguments |
+
+Upload SARIF to GitHub code scanning (needs `security-events: write`):
+
+```yaml
+- run: pqc-inventory scan . --out out --fail-on never
+- uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: out/results.sarif
+```
+
+Suppressed findings (for example downranked local hashes) are omitted from SARIF alerts.
+Scope remains static source + manifests only; SARIF output does not certify compliance.
 
 Example workflow: `.github/workflows/pqc-inventory.yml`
 

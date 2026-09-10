@@ -27,10 +27,11 @@ def test_e2e_sample_scan(tmp_path: Path):
         families.update(getattr(f, "families", None) or [f.family])
     assert any("RSA" in fam or fam == "RSA" for fam in families)
 
-    json_path, md_path, cbom_path = write_outputs(result, tmp_path / "out")
+    json_path, md_path, cbom_path, sarif_path = write_outputs(result, tmp_path / "out")
     assert json_path.is_file() and json_path.stat().st_size > 0
     assert md_path.is_file() and md_path.stat().st_size > 0
     assert cbom_path.is_file() and cbom_path.name == "cbom.cdx.json"
+    assert sarif_path.is_file() and sarif_path.name == "results.sarif"
 
     inventory = json.loads(json_path.read_text(encoding="utf-8"))
     assert inventory["summary"]["total_findings"] == len(result.findings)
@@ -110,3 +111,26 @@ def test_e2e_sample_scan(tmp_path: Path):
         "pqc-inventory:ref:nist-ir-8547",
     ):
         assert key in props, key
+
+    sarif = json.loads(sarif_path.read_text(encoding="utf-8"))
+    assert sarif["version"] == "2.1.0"
+    assert sarif["$schema"] == "https://json.schemastore.org/sarif-2.1.0.json"
+    assert len(sarif["runs"]) == 1
+    run = sarif["runs"][0]
+    assert run["tool"]["driver"]["name"] == "pqc-inventory"
+    sarif_results = run["results"]
+    active = [f for f in result.findings if not getattr(f, "suppressed", False)]
+    assert len(sarif_results) == len(active)
+    # Suppressed findings must not appear as SARIF alerts
+    for f in result.findings:
+        if not getattr(f, "suppressed", False):
+            continue
+        sline = f.line if f.line is not None else 1
+        leaked = [
+            r
+            for r in sarif_results
+            if r["ruleId"] == f.rule_id
+            and r["locations"][0]["physicalLocation"]["artifactLocation"]["uri"] == f.file
+            and r["locations"][0]["physicalLocation"]["region"]["startLine"] == sline
+        ]
+        assert not leaked, f"suppressed finding leaked into SARIF: {f.rule_id} {f.file}:{sline}"

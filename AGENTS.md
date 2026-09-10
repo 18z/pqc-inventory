@@ -23,6 +23,7 @@ Always pass `--out`. Read results from files, not from stdout.
 | `out/inventory.json` | Machine-readable findings. Prefer this. |
 | `out/report.md` | Human priority report and next steps |
 | `out/cbom.cdx.json` | CycloneDX 1.6-oriented CBOM |
+| `out/results.sarif` | SARIF 2.1.0 for GitHub code scanning |
 
 Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`, `owner`, `data_lifetime_years`.
 
@@ -30,6 +31,14 @@ Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`
 
 - Scope is source + dependency manifests only. Do not claim runtime, binary, or full-estate coverage.
 - CBOM may include `pqc-inventory:ref:*` planning references (EO 14412 / CNSA / NIST IR 8547). Never claim the scan certifies compliance.
+- `results.sarif` is SARIF 2.1.0; only non-suppressed findings become alerts. Upload with `github/codeql-action/upload-sarif@v3` (`sarif_file: out/results.sarif`); workflow needs `security-events: write`. Still static-only / not certification.
+  Example:
+  ```yaml
+  - run: pqc-inventory scan . --out out --fail-on never
+  - uses: github/codeql-action/upload-sarif@v3
+    with:
+      sarif_file: out/results.sarif
+  ```
 - Never invent `data_lifetime_years` or sensitivity. Leave unknown unless the user sets an override.
 - Overrides: `--set-lifetime 'path:line=15'`, `--set-exposure`, `--set-owner`, or a line comment `# pqc-inventory: lifetime=15 exposure=public_key owner=team`.
 - Hash/checksum noise: default `--hash-policy downrank`. Use `drop` to omit, `keep` to keep.

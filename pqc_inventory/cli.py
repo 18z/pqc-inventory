@@ -192,7 +192,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"error: {exc}", file=sys.stderr)
             return 2
 
-        json_path, md_path, cbom_path = write_outputs(result, args.out)
+        json_path, md_path, cbom_path, sarif_path = write_outputs(result, args.out)
         counts = result.counts_by_risk()
         raw_n = len(result.raw_findings)
         suppressed_n = sum(1 for f in result.findings if getattr(f, "suppressed", False))
@@ -208,6 +208,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote: {json_path}")
         print(f"Wrote: {md_path}")
         print(f"Wrote: {cbom_path}")
+        print(f"Wrote: {sarif_path}")
 
         should_fail, reason = evaluate_fail(
             result.findings, fail_on=args.fail_on, fail_score=args.fail_score
