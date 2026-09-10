@@ -44,6 +44,7 @@ Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`
 - Hash/checksum noise: default `--hash-policy downrank`. Use `drop` to omit, `keep` to keep.
 - Exit codes: `0` ok, `1` over `--fail-on` / `--fail-score`, `2` bad path or args.
 - CI that must not fail on demo highs: `--fail-on never`.
+- Baseline (known findings): `--write-baseline PATH` after a scan; `--baseline PATH` to suppress known fingerprints for fail-on / fail-score (primary report list is new-only). Fingerprint = `sha256(rule_id|file|normalize_whitespace(snippet))`, line-insensitive. Bad/missing baseline → exit 2.
 - Do not rewrite crypto, rotate keys, or "fix" findings unless the user explicitly asks.
 
 ## Suggested agent loop

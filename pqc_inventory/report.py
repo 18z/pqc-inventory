@@ -52,20 +52,50 @@ NEXT_STEPS = """
 """.strip()
 
 
-def build_inventory(result: ScanResult) -> dict:
+def build_inventory(result: ScanResult, baseline: dict | None = None) -> dict:
     prioritized = result.prioritized()
+    # When --baseline is applied, primary list is new-only (qscan-aligned).
+    baseline_applied = bool(baseline and "new_count" in baseline)
+    if baseline_applied:
+        prioritized = [
+            f for f in prioritized if not getattr(f, "baseline_suppressed", False)
+        ]
+
     raw_count = len(result.raw_findings) if result.raw_findings else len(result.findings)
-    return {
+
+    def _counts_by_risk(findings: list) -> dict[str, int]:
+        counts = {"high": 0, "medium": 0, "low": 0, "info": 0}
+        for f in findings:
+            risk = getattr(f, "quantum_risk", None) or "info"
+            counts[risk] = counts.get(risk, 0) + 1
+        return counts
+
+    def _counts_by_family(findings: list) -> dict[str, int]:
+        out: dict[str, int] = {}
+        for f in findings:
+            fams = getattr(f, "families", None) or [getattr(f, "family", None)]
+            for fam in fams:
+                if not fam:
+                    continue
+                out[fam] = out.get(fam, 0) + 1
+        return dict(sorted(out.items(), key=lambda x: (-x[1], x[0])))
+
+    summary_findings = prioritized if baseline_applied else result.findings
+    inv = {
         "tool": "pqc-inventory",
         "version": __version__,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "target": result.target,
         "files_scanned": result.files_scanned,
         "summary": {
-            "total_findings": len(result.findings),
+            "total_findings": len(summary_findings),
             "raw_findings_before_merge": raw_count,
-            "by_risk": result.counts_by_risk(),
-            "by_family": result.counts_by_family(),
+            "by_risk": _counts_by_risk(summary_findings)
+            if baseline_applied
+            else result.counts_by_risk(),
+            "by_family": _counts_by_family(summary_findings)
+            if baseline_applied
+            else result.counts_by_family(),
         },
         "findings": [f.to_dict() for f in prioritized],
         "overrides_applied": summarize_overrides_applied(result.findings),
@@ -101,6 +131,9 @@ def build_inventory(result: ScanResult) -> dict:
             "sort": "priority_score descending; priority field is display rank (1=most urgent)",
         },
     }
+    if baseline:
+        inv["baseline"] = baseline
+    return inv
 
 
 def render_markdown(inventory: dict) -> str:
@@ -119,6 +152,28 @@ def render_markdown(inventory: dict) -> str:
         f"- **Findings (merged)**: {summary['total_findings']} "
         f"(raw hits before merge: {raw})",
         "",
+    ]
+
+    bl = inventory.get("baseline")
+    if bl:
+        lines += ["## Baseline", ""]
+        if bl.get("written"):
+            lines.append(
+                f"- **Wrote baseline**: `{bl.get('path')}` "
+                f"(version {bl.get('version')}, "
+                f"{bl.get('fingerprint_count', 0)} fingerprint(s))"
+            )
+        if "new_count" in bl:
+            lines += [
+                f"- **Baseline file**: `{bl.get('path')}` (version {bl.get('version')})",
+                f"- **Suppressed (known)**: {bl.get('suppressed_count', 0)}",
+                f"- **New (not in baseline)**: {bl.get('new_count', 0)}",
+                "",
+                "_Primary prioritized list below shows **new** findings only._",
+            ]
+        lines += [""]
+
+    lines += [
         "## Risk summary",
         "",
         "| Risk | Count |",
@@ -215,10 +270,15 @@ def render_markdown(inventory: dict) -> str:
     return "\n".join(lines)
 
 
-def write_outputs(result: ScanResult, out_dir: str | Path) -> tuple[Path, Path, Path, Path]:
+def write_outputs(
+    result: ScanResult,
+    out_dir: str | Path,
+    *,
+    baseline: dict | None = None,
+) -> tuple[Path, Path, Path, Path]:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    inventory = build_inventory(result)
+    inventory = build_inventory(result, baseline=baseline)
     json_path = out / "inventory.json"
     md_path = out / "report.md"
     cbom_path = out / "cbom.cdx.json"

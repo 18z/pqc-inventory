@@ -1,7 +1,7 @@
 {
   "tool": "pqc-inventory",
   "version": "0.1.0",
-  "generated_at": "2026-09-08T06:10:57.684484+00:00",
+  "generated_at": "2026-09-10T01:18:05.765314+00:00",
   "target": "/workspace/a3-pqc-inventory/samples/vulnerable-app",
   "files_scanned": 5,
   "summary": {
@@ -62,7 +62,8 @@
         "data_lifetime_years": "annotation",
         "exposure": "annotation"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-jose-rsa-ec",
@@ -96,7 +97,8 @@
         "data_lifetime_years": "annotation",
         "exposure": "annotation"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-tls-cipher-rsa",
@@ -150,7 +152,8 @@
       "priority_score": 150,
       "priority_reason": "score=150 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-node-crypto-rsa",
@@ -184,7 +187,8 @@
         "data_lifetime_years": "annotation",
         "exposure": "annotation"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ec",
@@ -237,7 +241,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ec",
@@ -269,7 +274,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-node-crypto-ed",
@@ -301,7 +307,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-forge-rsa",
@@ -333,7 +340,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-webcrypto-rsa-alg",
@@ -365,7 +373,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-webcrypto-ec-alg",
@@ -397,7 +406,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ed25519",
@@ -472,7 +482,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ecdsa",
@@ -504,7 +515,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ed25519",
@@ -536,7 +548,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ecdsa",
@@ -568,7 +581,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-ecdsa",
@@ -598,7 +612,8 @@
       "priority_score": 142,
       "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-rsa",
@@ -628,7 +643,8 @@
       "priority_score": 142,
       "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-rsa-module",
@@ -680,7 +696,8 @@
       "priority_score": 142,
       "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-rsa-crypto",
@@ -710,7 +727,8 @@
       "priority_score": 142,
       "priority_reason": "score=142 (risk=high:100 + lifetime unknown→mid(+unknown penalty):20 + exposure=public-key / asymmetric API:22)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ec-crypto",
@@ -744,7 +762,8 @@
         "data_lifetime_years": "annotation",
         "exposure": "annotation"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-jose",
@@ -774,7 +793,8 @@
       "priority_score": 90,
       "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ssl",
@@ -806,7 +826,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-pyjwt",
@@ -836,7 +857,8 @@
       "priority_score": 90,
       "priority_reason": "score=90 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=network/TLS/JWT trust boundary:30)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-ssl",
@@ -870,7 +892,8 @@
         "data_lifetime_years": "annotation",
         "exposure": "annotation"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-node-crypto-require",
@@ -902,7 +925,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-forge-import",
@@ -934,7 +958,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-node-forge",
@@ -964,7 +989,8 @@
       "priority_score": 72,
       "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-cryptography",
@@ -994,7 +1020,8 @@
       "priority_score": 72,
       "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "dep-pycryptodome",
@@ -1024,7 +1051,8 @@
       "priority_score": 72,
       "priority_reason": "score=72 (risk=medium:40 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
       "overrides_applied": {},
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-aes",
@@ -1056,7 +1084,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-aes",
@@ -1088,7 +1117,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": false
+      "suppressed": false,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "js-hash",
@@ -1120,7 +1150,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": true
+      "suppressed": true,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-hashlib",
@@ -1152,7 +1183,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": true
+      "suppressed": true,
+      "baseline_suppressed": false
     },
     {
       "rule_id": "py-hashlib",
@@ -1184,7 +1216,8 @@
       "overrides_applied": {
         "owner": "annotation-file"
       },
-      "suppressed": true
+      "suppressed": true,
+      "baseline_suppressed": false
     }
   ],
   "overrides_applied": {
@@ -1439,7 +1472,7 @@
   },
   "scope": {
     "defensive_only": true,
-    "analysis": "static scan of source code and dependency manifests only, not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM). static analysis of source code + dependency manifests only — not runtime, binaries, network traffic, or complete coverage guarantee",
+    "analysis": "static scan of source code and dependency manifests only, not runtime (not network traffic, binaries, negotiated TLS, or a complete CBOM)",
     "non_goals": [
       "No attack tools or exploits",
       "No key-breaking or cryptanalysis",

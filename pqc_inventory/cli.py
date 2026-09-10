@@ -12,6 +12,7 @@ from pqc_inventory.overrides import (
     load_overrides_json,
     parse_cli_override,
 )
+from pqc_inventory.baseline import apply_baseline, load_baseline, save_baseline
 from pqc_inventory.report import write_outputs
 from pqc_inventory.scanner import scan_directory
 
@@ -119,6 +120,28 @@ def build_parser() -> argparse.ArgumentParser:
             "Independent of --fail-on; either threshold can trigger exit 1."
         ),
     )
+
+    # --- Baseline / known-findings (qscan-aligned) ---
+    scan_p.add_argument(
+        "--write-baseline",
+        type=str,
+        default=None,
+        metavar="PATH",
+        help=(
+            "After scan, write a baseline of current findings "
+            "(post-merge / post-hash-policy) to PATH. Still writes normal outs."
+        ),
+    )
+    scan_p.add_argument(
+        "--baseline",
+        type=str,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Load baseline fingerprints; matching findings are suppressed for "
+            "--fail-on / --fail-score and omitted from the primary report list."
+        ),
+    )
     return parser
 
 
@@ -129,8 +152,13 @@ def evaluate_fail(
     fail_on: str = "never",
     fail_score: int | None = None,
 ) -> tuple[bool, str]:
-    """Return (should_fail, reason). Suppressed findings are ignored."""
-    active = [f for f in findings if not getattr(f, "suppressed", False)]
+    """Return (should_fail, reason). Hash- and baseline-suppressed findings are ignored."""
+    active = [
+        f
+        for f in findings
+        if not getattr(f, "suppressed", False)
+        and not getattr(f, "baseline_suppressed", False)
+    ]
     if fail_on != "never":
         threshold = RISK_ORDER[fail_on]
         offenders = [
@@ -192,14 +220,68 @@ def main(argv: list[str] | None = None) -> int:
             print(f"error: {exc}", file=sys.stderr)
             return 2
 
-        json_path, md_path, cbom_path, sarif_path = write_outputs(result, args.out)
+        baseline_meta = None
+        if args.write_baseline:
+            try:
+                bl = save_baseline(args.write_baseline, result.findings)
+            except OSError as exc:
+                print(f"error: cannot write baseline: {exc}", file=sys.stderr)
+                return 2
+            baseline_meta = {
+                "written": True,
+                "path": str(args.write_baseline),
+                "version": bl["version"],
+                "fingerprint_count": len(bl["fingerprints"]),
+            }
+            print(
+                f"Wrote baseline: {args.write_baseline} "
+                f"({len(bl['fingerprints'])} fingerprint(s))"
+            )
+
+        if args.baseline:
+            try:
+                bl = load_baseline(args.baseline)
+            except FileNotFoundError as exc:
+                print(f"error: {exc}", file=sys.stderr)
+                return 2
+            except ValueError as exc:
+                print(f"error: {exc}", file=sys.stderr)
+                return 2
+            new_findings, suppressed = apply_baseline(result.findings, bl)
+            applied = {
+                "path": str(args.baseline),
+                "version": bl["version"],
+                "suppressed_count": len(suppressed),
+                "new_count": len(new_findings),
+            }
+            if baseline_meta and baseline_meta.get("written"):
+                baseline_meta = {**baseline_meta, **applied}
+            else:
+                baseline_meta = applied
+            print(
+                f"Baseline {args.baseline}: "
+                f"{len(suppressed)} suppressed, {len(new_findings)} new"
+            )
+
+        json_path, md_path, cbom_path, sarif_path = write_outputs(
+            result, args.out, baseline=baseline_meta
+        )
         counts = result.counts_by_risk()
         raw_n = len(result.raw_findings)
         suppressed_n = sum(1 for f in result.findings if getattr(f, "suppressed", False))
+        baseline_suppressed_n = sum(
+            1 for f in result.findings if getattr(f, "baseline_suppressed", False)
+        )
         print(
             f"Scanned {result.files_scanned} file(s); "
             f"{len(result.findings)} merged finding(s) "
-            f"(raw hits: {raw_n}; suppressed: {suppressed_n})."
+            f"(raw hits: {raw_n}; suppressed: {suppressed_n}"
+            + (
+                f"; baseline_suppressed: {baseline_suppressed_n}"
+                if args.baseline
+                else ""
+            )
+            + ")."
         )
         print(
             f"  high={counts['high']} medium={counts['medium']} "

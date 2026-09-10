@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from pqc_inventory import __version__
+from pqc_inventory.baseline import FINGERPRINT_SARIF_KEY, fingerprint_finding
 from pqc_inventory.scanner import ScanResult
 
 SARIF_SCHEMA = "https://json.schemastore.org/sarif-2.1.0.json"
@@ -26,11 +27,6 @@ _DRIVER_NOTE = (
 
 def _level_for(risk: str) -> str:
     return _RISK_TO_LEVEL.get(risk, "note")
-
-
-def _fingerprint(file: str, line: int | None, rule_id: str) -> str:
-    line_part = str(line if line is not None else 1)
-    return f"{file}|{line_part}|{rule_id}"
 
 
 def _collect_rule_ids(findings: list) -> list[str]:
@@ -106,7 +102,12 @@ def build_sarif(result: ScanResult) -> dict[str, Any]:
     Only non-suppressed findings become SARIF results (alerts).
     """
     prioritized = result.prioritized()
-    active = [f for f in prioritized if not getattr(f, "suppressed", False)]
+    active = [
+        f
+        for f in prioritized
+        if not getattr(f, "suppressed", False)
+        and not getattr(f, "baseline_suppressed", False)
+    ]
     # Rules cover all findings (including suppressed) so descriptors stay stable,
     # but results only list active alerts.
     all_for_rules = prioritized
@@ -140,7 +141,7 @@ def build_sarif(result: ScanResult) -> dict[str, Any]:
                 }
             ],
             "partialFingerprints": {
-                "pqcInventory/v1": _fingerprint(file_path, line, rule_id),
+                FINGERPRINT_SARIF_KEY: fingerprint_finding(f),
             },
         }
         props = _result_properties(f)

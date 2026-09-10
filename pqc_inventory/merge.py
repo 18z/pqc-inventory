@@ -167,6 +167,7 @@ class MergedFinding:
     priority_reason: str = ""
     overrides_applied: dict = field(default_factory=dict)
     suppressed: bool = False
+    baseline_suppressed: bool = False
 
     def to_dict(self) -> dict:
         return asdict(self)

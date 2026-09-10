@@ -7,6 +7,7 @@ from pathlib import Path
 
 from pqc_inventory import __version__
 from pqc_inventory.report import write_outputs
+from pqc_inventory.baseline import FINGERPRINT_SARIF_KEY, fingerprint_finding
 from pqc_inventory.sarif import build_sarif
 from pqc_inventory.scanner import Finding, ScanResult, scan_directory
 
@@ -97,7 +98,7 @@ def test_build_sarif_schema_and_levels():
     rsa = next(r for r in run["results"] if r["ruleId"] == "py-rsa")
     assert rsa["locations"][0]["physicalLocation"]["artifactLocation"]["uri"] == "app.py"
     assert rsa["locations"][0]["physicalLocation"]["region"]["startLine"] == 10
-    assert rsa["partialFingerprints"]["pqcInventory/v1"] == "app.py|10|py-rsa"
+    assert rsa["partialFingerprints"][FINGERPRINT_SARIF_KEY] == fingerprint_finding(high)
     assert rsa["properties"]["priority_score"] == 142
     assert rsa["properties"]["family"] == "RSA"
     assert rsa["properties"]["exposure"] == "public_key"
@@ -139,7 +140,7 @@ def test_none_line_defaults_to_one():
     doc = build_sarif(result)
     r = doc["runs"][0]["results"][0]
     assert r["locations"][0]["physicalLocation"]["region"]["startLine"] == 1
-    assert r["partialFingerprints"]["pqcInventory/v1"] == "app.py|1|py-rsa"
+    assert r["partialFingerprints"][FINGERPRINT_SARIF_KEY] == fingerprint_finding(f)
 
 
 def test_merged_rule_ids_appear_in_driver_rules():

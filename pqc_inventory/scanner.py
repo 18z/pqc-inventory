@@ -75,6 +75,7 @@ class Finding:
     # Explicit override / suppression metadata (never invent values)
     overrides_applied: dict = field(default_factory=dict)
     suppressed: bool = False
+    baseline_suppressed: bool = False
 
     def to_dict(self) -> dict:
         d = asdict(self)

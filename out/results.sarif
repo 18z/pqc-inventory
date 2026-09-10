@@ -1,0 +1,1601 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "pqc-inventory",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/18z/pqc-inventory",
+          "rules": [
+            {
+              "id": "py-rsa-crypto",
+              "name": "py_rsa_crypto",
+              "shortDescription": {
+                "text": "py-rsa-crypto"
+              },
+              "fullDescription": {
+                "text": "cryptography.io RSA API"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-jose-rsa-ec",
+              "name": "js_jose_rsa_ec",
+              "shortDescription": {
+                "text": "js-jose-rsa-ec"
+              },
+              "fullDescription": {
+                "text": "jose / JWT classical RSA or ECDSA algs"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-tls-cipher-rsa",
+              "name": "py_tls_cipher_rsa",
+              "shortDescription": {
+                "text": "py-tls-cipher-rsa"
+              },
+              "fullDescription": {
+                "text": "TLS cipher suite using classical RSA (+2 overlapping rules) (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-ssl",
+              "name": "py_ssl",
+              "shortDescription": {
+                "text": "py-ssl"
+              },
+              "fullDescription": {
+                "text": "TLS cipher suite using classical RSA (+2 overlapping rules) (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-tls-cipher-aes",
+              "name": "py_tls_cipher_aes",
+              "shortDescription": {
+                "text": "py-tls-cipher-aes"
+              },
+              "fullDescription": {
+                "text": "TLS cipher suite using classical RSA (+2 overlapping rules) (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-node-crypto-rsa",
+              "name": "js_node_crypto_rsa",
+              "shortDescription": {
+                "text": "js-node-crypto-rsa"
+              },
+              "fullDescription": {
+                "text": "Node.js crypto RSA"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-node-crypto-ec",
+              "name": "js_node_crypto_ec",
+              "shortDescription": {
+                "text": "js-node-crypto-ec"
+              },
+              "fullDescription": {
+                "text": "Node.js crypto EC / ECDH (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-webcrypto-ec-alg",
+              "name": "js_webcrypto_ec_alg",
+              "shortDescription": {
+                "text": "js-webcrypto-ec-alg"
+              },
+              "fullDescription": {
+                "text": "Node.js crypto EC / ECDH (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-node-crypto-ed",
+              "name": "js_node_crypto_ed",
+              "shortDescription": {
+                "text": "js-node-crypto-ed"
+              },
+              "fullDescription": {
+                "text": "Node.js Ed25519"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-forge-rsa",
+              "name": "js_forge_rsa",
+              "shortDescription": {
+                "text": "js-forge-rsa"
+              },
+              "fullDescription": {
+                "text": "node-forge RSA"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "js-webcrypto-rsa-alg",
+              "name": "js_webcrypto_rsa_alg",
+              "shortDescription": {
+                "text": "js-webcrypto-rsa-alg"
+              },
+              "fullDescription": {
+                "text": "WebCrypto RSA algorithm name"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-ed25519",
+              "name": "py_ed25519",
+              "shortDescription": {
+                "text": "py-ed25519"
+              },
+              "fullDescription": {
+                "text": "Ed25519 / EdDSA classical signature (+2 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-cryptography-lib",
+              "name": "py_cryptography_lib",
+              "shortDescription": {
+                "text": "py-cryptography-lib"
+              },
+              "fullDescription": {
+                "text": "Ed25519 / EdDSA classical signature (+2 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-rsa-module",
+              "name": "py_rsa_module",
+              "shortDescription": {
+                "text": "py-rsa-module"
+              },
+              "fullDescription": {
+                "text": "Ed25519 / EdDSA classical signature (+2 overlapping rules)"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-ecdsa",
+              "name": "py_ecdsa",
+              "shortDescription": {
+                "text": "py-ecdsa"
+              },
+              "fullDescription": {
+                "text": "python-ecdsa classical signatures"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "dep-ecdsa",
+              "name": "dep_ecdsa",
+              "shortDescription": {
+                "text": "dep-ecdsa"
+              },
+              "fullDescription": {
+                "text": "ecdsa package dependency"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "dep-rsa",
+              "name": "dep_rsa",
+              "shortDescription": {
+                "text": "dep-rsa"
+              },
+              "fullDescription": {
+                "text": "rsa package dependency"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "py-ec-crypto",
+              "name": "py_ec_crypto",
+              "shortDescription": {
+                "text": "py-ec-crypto"
+              },
+              "fullDescription": {
+                "text": "cryptography.io elliptic-curve API"
+              },
+              "help": {
+                "text": "Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "high"
+              }
+            },
+            {
+              "id": "dep-jose",
+              "name": "dep_jose",
+              "shortDescription": {
+                "text": "dep-jose"
+              },
+              "fullDescription": {
+                "text": "jose dependency (check alg usage)"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "dep-pyjwt",
+              "name": "dep_pyjwt",
+              "shortDescription": {
+                "text": "dep-pyjwt"
+              },
+              "fullDescription": {
+                "text": "PyJWT dependency"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "js-node-crypto-require",
+              "name": "js_node_crypto_require",
+              "shortDescription": {
+                "text": "js-node-crypto-require"
+              },
+              "fullDescription": {
+                "text": "Node crypto module import"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "js-forge-import",
+              "name": "js_forge_import",
+              "shortDescription": {
+                "text": "js-forge-import"
+              },
+              "fullDescription": {
+                "text": "node-forge import"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "dep-node-forge",
+              "name": "dep_node_forge",
+              "shortDescription": {
+                "text": "dep-node-forge"
+              },
+              "fullDescription": {
+                "text": "node-forge dependency"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "dep-cryptography",
+              "name": "dep_cryptography",
+              "shortDescription": {
+                "text": "dep-cryptography"
+              },
+              "fullDescription": {
+                "text": "cryptography package dependency"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "dep-pycryptodome",
+              "name": "dep_pycryptodome",
+              "shortDescription": {
+                "text": "dep-pycryptodome"
+              },
+              "fullDescription": {
+                "text": "PyCryptodome/PyCrypto dependency"
+              },
+              "help": {
+                "text": "TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "medium"
+              }
+            },
+            {
+              "id": "js-aes",
+              "name": "js_aes",
+              "shortDescription": {
+                "text": "js-aes"
+              },
+              "fullDescription": {
+                "text": "AES symmetric encryption"
+              },
+              "help": {
+                "text": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "low"
+              }
+            },
+            {
+              "id": "py-aes",
+              "name": "py_aes",
+              "shortDescription": {
+                "text": "py-aes"
+              },
+              "fullDescription": {
+                "text": "AES symmetric encryption"
+              },
+              "help": {
+                "text": "Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "low"
+              }
+            },
+            {
+              "id": "js-hash",
+              "name": "js_hash",
+              "shortDescription": {
+                "text": "js-hash"
+              },
+              "fullDescription": {
+                "text": "SHA hash / integrity"
+              },
+              "help": {
+                "text": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "info"
+              }
+            },
+            {
+              "id": "py-hashlib",
+              "name": "py_hashlib",
+              "shortDescription": {
+                "text": "py-hashlib"
+              },
+              "fullDescription": {
+                "text": "hashlib digest / integrity"
+              },
+              "help": {
+                "text": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "info"
+              }
+            }
+          ],
+          "properties": {
+            "note": "Static scan of source code and dependency manifests only. Does not certify compliance with EO 14412, CNSA 2.0, NIST IR 8547, or any other mandate.",
+            "scope": "static source+manifests only; does not certify compliance"
+          }
+        }
+      },
+      "results": [
+        {
+          "ruleId": "py-rsa-crypto",
+          "level": "error",
+          "message": {
+            "text": "cryptography.io RSA API: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 14
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "63773d86080a83001403487d206fe6309d6ac0811f60cb469bbad175fb58be20"
+          },
+          "properties": {
+            "priority_score": 152,
+            "family": "RSA",
+            "exposure": "public_key",
+            "owner": "payments",
+            "data_lifetime_years": 15
+          }
+        },
+        {
+          "ruleId": "js-jose-rsa-ec",
+          "level": "error",
+          "message": {
+            "text": "jose / JWT classical RSA or ECDSA algs: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 23
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "fb3fd4bfe371d3595e62518cec8f21c94e20c79051b029a3300dcb64c575ba9d"
+          },
+          "properties": {
+            "priority_score": 150,
+            "family": "JWT/JOSE",
+            "exposure": "trust_boundary",
+            "owner": "auth",
+            "data_lifetime_years": 10
+          }
+        },
+        {
+          "ruleId": "py-tls-cipher-rsa",
+          "level": "error",
+          "message": {
+            "text": "TLS cipher suite using classical RSA (+2 overlapping rules) (+1 overlapping rules): Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/tls_cipher_site.py"
+                },
+                "region": {
+                  "startLine": 11
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "be2fc0f26b2770818386c4bb51d24dadc09b183d4788368845e9626a3b442137"
+          },
+          "properties": {
+            "priority_score": 150,
+            "family": "RSA",
+            "exposure": "trust_boundary",
+            "merged_rule_ids": [
+              "py-ssl",
+              "py-tls-cipher-aes",
+              "py-tls-cipher-rsa"
+            ]
+          }
+        },
+        {
+          "ruleId": "js-node-crypto-rsa",
+          "level": "error",
+          "message": {
+            "text": "Node.js crypto RSA: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 9
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "02925f3b00fd0b243661e0678d433dc8c1f82d77b90ff192b95a6d379f0bd42f"
+          },
+          "properties": {
+            "priority_score": 146,
+            "family": "RSA",
+            "exposure": "public_key",
+            "owner": "key-mgmt",
+            "data_lifetime_years": 12
+          }
+        },
+        {
+          "ruleId": "js-node-crypto-ec",
+          "level": "error",
+          "message": {
+            "text": "Node.js crypto EC / ECDH (+1 overlapping rules): Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "1c10190c36af5bf2ec792301fd74537fd06b019a1243e82f068be4f7a04d6844"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA/ECDH",
+            "exposure": "public_key",
+            "owner": "sample-js-team",
+            "merged_rule_ids": [
+              "js-node-crypto-ec",
+              "js-webcrypto-ec-alg"
+            ]
+          }
+        },
+        {
+          "ruleId": "js-node-crypto-ec",
+          "level": "error",
+          "message": {
+            "text": "Node.js crypto EC / ECDH: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 13
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "d0cae63b866393f16713933d666abe7c0f2599cfce0cc34e06e4c2d47df28bec"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA/ECDH",
+            "exposure": "public_key",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "js-node-crypto-ed",
+          "level": "error",
+          "message": {
+            "text": "Node.js Ed25519: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 16
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "88e4876c32f160d0b6c383b7931d979ba95d0f3a91ebcb956a7d0968de791dc4"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "EdDSA",
+            "exposure": "public_key",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "js-forge-rsa",
+          "level": "error",
+          "message": {
+            "text": "node-forge RSA: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 19
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "31ec69d8150302a9b87cb466cda28f300a7635e2d15e9b24a1553d1e488b57fc"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "RSA",
+            "exposure": "public_key",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "js-webcrypto-rsa-alg",
+          "level": "error",
+          "message": {
+            "text": "WebCrypto RSA algorithm name: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 26
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "8a852494ee5a1b82cbad33bf51cd3e74158a813c27c8a0e20e166e5802e48e3d"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "RSA",
+            "exposure": "public_key",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "js-webcrypto-ec-alg",
+          "level": "error",
+          "message": {
+            "text": "WebCrypto classical EC curves: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 27
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "f92d22a12b36776130b59fd54a56277de8e4961d2f0a7b2b3037f2d47a30c586"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA/ECDH",
+            "exposure": "public_key",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "py-ed25519",
+          "level": "error",
+          "message": {
+            "text": "Ed25519 / EdDSA classical signature (+2 overlapping rules): Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "32f62a1335a1e52290dc37c25dfedc14e7933f9fe297a6ab96edc01fe58c8685"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "EdDSA",
+            "exposure": "public_key",
+            "owner": "sample-python-team",
+            "merged_rule_ids": [
+              "py-cryptography-lib",
+              "py-ed25519",
+              "py-rsa-module"
+            ]
+          }
+        },
+        {
+          "ruleId": "py-ecdsa",
+          "level": "error",
+          "message": {
+            "text": "python-ecdsa classical signatures: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 9
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "444e0db0022cb8332c194ff6056bc54a592c3d945096d23a4a4a4e9d1ba084f2"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA",
+            "exposure": "public_key",
+            "owner": "sample-python-team"
+          }
+        },
+        {
+          "ruleId": "py-ed25519",
+          "level": "error",
+          "message": {
+            "text": "Ed25519 / EdDSA classical signature: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 21
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "d6814c6e4bfa3528c9e9e0d77863e0f6925389c6106eaaa406a935338cb38609"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "EdDSA",
+            "exposure": "public_key",
+            "owner": "sample-python-team"
+          }
+        },
+        {
+          "ruleId": "py-ecdsa",
+          "level": "error",
+          "message": {
+            "text": "python-ecdsa classical signatures: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 24
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "4b1257c6b0e22a29084523750d1f90b12cf143e1d3ed6610065fe1e5cf2e4a17"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA",
+            "exposure": "public_key",
+            "owner": "sample-python-team"
+          }
+        },
+        {
+          "ruleId": "dep-ecdsa",
+          "level": "error",
+          "message": {
+            "text": "ecdsa package dependency: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/requirements.txt"
+                },
+                "region": {
+                  "startLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "e188ac6a3cfe4a86aa383d02fb696e79b310b3d8a37b41c4bcbda1f13f9fea83"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "ECDSA",
+            "exposure": "public_key"
+          }
+        },
+        {
+          "ruleId": "dep-rsa",
+          "level": "error",
+          "message": {
+            "text": "rsa package dependency: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/requirements.txt"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "bc12aca90814c4e45d3ffcf793ce0c0a314763eb14d65176902bd4c9d8a25524"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "RSA",
+            "exposure": "public_key"
+          }
+        },
+        {
+          "ruleId": "py-rsa-module",
+          "level": "error",
+          "message": {
+            "text": "python-rsa / rsa package import (+1 overlapping rules): Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/tls_cipher_site.py"
+                },
+                "region": {
+                  "startLine": 35
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "ce4c8e431cd13c2af888e0568fce97fba82e84487f30c9cf93a965a53b9c8db9"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "RSA",
+            "exposure": "public_key",
+            "merged_rule_ids": [
+              "py-cryptography-lib",
+              "py-rsa-module"
+            ]
+          }
+        },
+        {
+          "ruleId": "py-rsa-crypto",
+          "level": "error",
+          "message": {
+            "text": "cryptography.io RSA API: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/tls_cipher_site.py"
+                },
+                "region": {
+                  "startLine": 37
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "2c6ef779b76a10c2c1442e51545db4c04f73e0fbeffaefa5b6ae6ea63538ee5e"
+          },
+          "properties": {
+            "priority_score": 142,
+            "family": "RSA",
+            "exposure": "public_key"
+          }
+        },
+        {
+          "ruleId": "py-ec-crypto",
+          "level": "error",
+          "message": {
+            "text": "cryptography.io elliptic-curve API: Classical public-key scheme vulnerable to Shor's algorithm; plan migration to NIST PQC (ML-KEM / ML-DSA / SLH-DSA) for long-term trust."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 18
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "8311f07570bc91f60b7061c13fbb6c354b16ff24428fa2a2e5769508d4220e1e"
+          },
+          "properties": {
+            "priority_score": 138,
+            "family": "ECDSA/ECDH",
+            "exposure": "public_key",
+            "owner": "sample-python-team",
+            "data_lifetime_years": 8
+          }
+        },
+        {
+          "ruleId": "dep-jose",
+          "level": "warning",
+          "message": {
+            "text": "jose dependency (check alg usage): TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/package.json"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "be8624b6309c07829a9f368b7771616f0df10d75163f5006a9869848e460ec28"
+          },
+          "properties": {
+            "priority_score": 90,
+            "family": "JWT/JOSE",
+            "exposure": "trust_boundary"
+          }
+        },
+        {
+          "ruleId": "py-ssl",
+          "level": "warning",
+          "message": {
+            "text": "stdlib ssl / TLS wrapper (check cipher suites): TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "d73067bf07745e0849ad79dcdf4ad2205de5776c4af89a33bfde0b71a48757db"
+          },
+          "properties": {
+            "priority_score": 90,
+            "family": "TLS/SSL",
+            "exposure": "trust_boundary",
+            "owner": "sample-python-team"
+          }
+        },
+        {
+          "ruleId": "dep-pyjwt",
+          "level": "warning",
+          "message": {
+            "text": "PyJWT dependency: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/requirements.txt"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "a37c7dd85bd2c22a182a6c243b16b8ae6d5ea35a988d34226072a9bee5a983fc"
+          },
+          "properties": {
+            "priority_score": 90,
+            "family": "JWT",
+            "exposure": "trust_boundary"
+          }
+        },
+        {
+          "ruleId": "py-ssl",
+          "level": "warning",
+          "message": {
+            "text": "stdlib ssl / TLS wrapper (check cipher suites): TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 28
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "90041b48ac99d722a736484da6cce96982cf5fc2b624fa179aba1c9a67b07a15"
+          },
+          "properties": {
+            "priority_score": 80,
+            "family": "TLS/SSL",
+            "exposure": "trust_boundary",
+            "owner": "edge-tls",
+            "data_lifetime_years": 5
+          }
+        },
+        {
+          "ruleId": "js-node-crypto-require",
+          "level": "warning",
+          "message": {
+            "text": "Node crypto module import: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "37c128d903d9184278b4aabf216327210d8b34b3fb774fb67c2a75b50d183c0a"
+          },
+          "properties": {
+            "priority_score": 72,
+            "family": "node:crypto",
+            "exposure": "library_import",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "js-forge-import",
+          "level": "warning",
+          "message": {
+            "text": "node-forge import: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "4af45f8694db883a100ca9eafd658709f77ae0099022025679e3131fa7e75853"
+          },
+          "properties": {
+            "priority_score": 72,
+            "family": "node-forge",
+            "exposure": "library_import",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "dep-node-forge",
+          "level": "warning",
+          "message": {
+            "text": "node-forge dependency: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/package.json"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "5aa1ab542a92abe65b29d15f3bdf6c0c11ea1f578b2129cc651ae3a5cb1133d7"
+          },
+          "properties": {
+            "priority_score": 72,
+            "family": "node-forge",
+            "exposure": "library_import"
+          }
+        },
+        {
+          "ruleId": "dep-cryptography",
+          "level": "warning",
+          "message": {
+            "text": "cryptography package dependency: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/requirements.txt"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "28dd7fe856030f9da3a4da5e934cc0cc06e35c87fb46dbdc0a3b7334a520f167"
+          },
+          "properties": {
+            "priority_score": 72,
+            "family": "cryptography",
+            "exposure": "library_import"
+          }
+        },
+        {
+          "ruleId": "dep-pycryptodome",
+          "level": "warning",
+          "message": {
+            "text": "PyCryptodome/PyCrypto dependency: TLS or crypto wrapper usage without clear PQC hybrid; verify cipher suites and library PQC readiness."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/requirements.txt"
+                },
+                "region": {
+                  "startLine": 4
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "0de523a4c20c8106abfe31b160dc5b08b2cc9f7fc1a3ac1e8f0b83dc37c5d79e"
+          },
+          "properties": {
+            "priority_score": 72,
+            "family": "PyCryptodome",
+            "exposure": "library_import"
+          }
+        },
+        {
+          "ruleId": "js-aes",
+          "level": "note",
+          "message": {
+            "text": "AES symmetric encryption: Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js_app/crypto_demo.js"
+                },
+                "region": {
+                  "startLine": 30
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "af94d6f4aa27165eae16008e191fbd16a1d5c34bbe3c98bc0e11c0592f07dde0"
+          },
+          "properties": {
+            "priority_score": 41,
+            "family": "AES",
+            "exposure": "symmetric",
+            "owner": "sample-js-team"
+          }
+        },
+        {
+          "ruleId": "py-aes",
+          "level": "note",
+          "message": {
+            "text": "AES symmetric encryption: Symmetric cipher: Grover's algorithm roughly halves effective key bits; AES-256 / ChaCha20 remain practical; prefer 256-bit keys."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python_app/crypto_demo.py"
+                },
+                "region": {
+                  "startLine": 31
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "pqc-inventory/v1": "222f93f54ed7b685af07de322f145f8568268c159e70dcd0ae0602e7859bf2d2"
+          },
+          "properties": {
+            "priority_score": 41,
+            "family": "AES",
+            "exposure": "symmetric",
+            "owner": "sample-python-team"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:18ff8bdd-5d45-4f75-bb24-2895b4e83239",
+  "serialNumber": "urn:uuid:1e7918d0-148c-4b45-a14b-fcb5610144bb",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-08T06:10:57.686957+00:00",
+    "timestamp": "2026-09-10T01:18:05.767599+00:00",
     "tools": {
       "components": [
         {
@@ -24,6 +24,30 @@
       {
         "name": "pqc-inventory:scope",
         "value": "static analysis of source code + dependency manifests only; not runtime, binaries, network traffic, or complete coverage"
+      },
+      {
+        "name": "pqc-inventory:compliance-note",
+        "value": "Planning references only; pqc-inventory does not certify compliance with EO 14412, CNSA 2.0, NIST IR 8547, or any mandate"
+      },
+      {
+        "name": "pqc-inventory:ref:eo-14412-cbom-min-elements",
+        "value": "CISA+NIST CBOM minimum elements guidance due ~270 days after EO 14412 (2026-06-22) ≈ 2027-03; not finalized at emit time"
+      },
+      {
+        "name": "pqc-inventory:ref:eo-14412-pqc-key-est",
+        "value": "HVA/high-impact PQC key establishment target 2030-12-31"
+      },
+      {
+        "name": "pqc-inventory:ref:eo-14412-pqc-signatures",
+        "value": "HVA/high-impact PQC digital signatures target 2031-12-31"
+      },
+      {
+        "name": "pqc-inventory:ref:cnsa-2.0",
+        "value": "NSA CNSA 2.0 — planning reference only"
+      },
+      {
+        "name": "pqc-inventory:ref:nist-ir-8547",
+        "value": "NIST IR 8547 — planning reference only"
       }
     ]
   },

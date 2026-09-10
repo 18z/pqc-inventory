@@ -1,10 +1,10 @@
 # PQC Cryptographic Asset Inventory Report
 
-> **Scope:** This is a **static scan of source code and dependency manifests only**, **not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM). static analysis of source code + dependency manifests only — not runtime, binaries, network traffic, or a complete coverage guarantee.
+> **Scope:** This is a **static scan of source code and dependency manifests only**, **not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM).
 
 - **Tool**: pqc-inventory v0.1.0
 - **Target**: `/workspace/a3-pqc-inventory/samples/vulnerable-app`
-- **Generated (UTC)**: 2026-09-08T06:10:57.684484+00:00
+- **Generated (UTC)**: 2026-09-10T01:18:05.765314+00:00
 - **Files scanned**: 5
 - **Findings (merged)**: 33 (raw hits before merge: 41)
 
@@ -616,6 +616,22 @@ _Sorted by **priority_score** (quantum risk + data lifetime + exposure). Same-si
 6. **This tool is defensive-only** — It does not migrate keys, break crypto, or suggest exploits.
    Use results as an inventory input for your crypto-agility program.
 
+
+## Planning references (not certification)
+
+These are **planning references only**. This tool does **not** certify compliance with
+EO 14412, CNSA 2.0, NIST IR 8547, or any other mandate.
+
+| Reference | Note |
+|-----------|------|
+| EO 14412 CBOM minimum elements | CISA + NIST public guidance due ~270 days after 2026-06-22 (≈ 2027-03) |
+| EO 14412 PQC key establishment | HVA / high-impact systems target **2030-12-31** |
+| EO 14412 PQC digital signatures | HVA / high-impact systems target **2031-12-31** |
+| NSA CNSA 2.0 | Migration planning reference |
+| NIST IR 8547 | Transition planning reference |
+
+CBOM `metadata.properties` repeats these under `pqc-inventory:ref:*` for downstream tooling.
+
 ## Quantum-risk legend
 
 - **high** — RSA, classical ECDSA/ECDH/EdDSA (long-term trust), finite-field DH
@@ -625,6 +641,6 @@ _Sorted by **priority_score** (quantum risk + data lifetime + exposure). Same-si
 
 ## Scope reminder
 
-**Scope:** This is a **static scan of source code and dependency manifests only**, **not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM). static analysis of source code + dependency manifests only — not runtime, binaries, network traffic, or a complete coverage guarantee.
+**Scope:** This is a **static scan of source code and dependency manifests only**, **not runtime** (not network traffic, binaries, negotiated TLS, or a complete CBOM).
 
 This report is produced by a **defensive** static inventory scanner. It does **not** implement attacks, exploits, migration engines, or key-breaking.

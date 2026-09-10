@@ -74,6 +74,36 @@ pqc-inventory scan PATH --out ./out --fail-on high
 | 1 | Over the threshold |
 | 2 | Bad path or arguments |
 
+### Baseline (known findings)
+
+A baseline records fingerprints of findings you have already triaged so CI /
+`--fail-on` only fails on **new** findings. Fingerprints are line-insensitive:
+
+`sha256(rule_id + "|" + file + "|" + normalize_whitespace(snippet))`
+
+```bash
+# 1. On main (once): accept the current inventory as known.
+pqc-inventory scan . --out ./out --write-baseline .pqc-inventory-baseline.json
+
+# 2. In CI: fail only on findings not in the baseline.
+pqc-inventory scan . --out ./out \
+  --baseline .pqc-inventory-baseline.json \
+  --fail-on high
+```
+
+Baseline file shape:
+
+```json
+{
+  "version": 1,
+  "fingerprints": ["hex...", "..."]
+}
+```
+
+Missing / invalid baseline or unsupported `version` → exit 2.
+`--fail-on` / `--fail-score` evaluate only non-suppressed **new** findings.
+SARIF `partialFingerprints["pqc-inventory/v1"]` uses the same fingerprint.
+
 Upload SARIF to GitHub code scanning (needs `security-events: write`):
 
 ```yaml
