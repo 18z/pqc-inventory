@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:bb4b6cc7-bd4b-47aa-a53e-08aa3708439d",
+  "serialNumber": "urn:uuid:5e6e790e-03f7-49d7-8a02-ea6228c2a9ab",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-11T01:14:39.290105+00:00",
+    "timestamp": "2026-09-11T01:23:36.371121+00:00",
     "tools": {
       "components": [
         {
@@ -335,13 +335,7 @@
             "location": "js_app/pqc_migrated.js",
             "line": 6,
             "rule_ids": [
-              "js-ml-dsa"
-            ]
-          },
-          {
-            "location": "js_app/pqc_migrated.js",
-            "line": 7,
-            "rule_ids": [
+              "js-dilithium",
               "js-ml-dsa"
             ]
           },
@@ -349,13 +343,7 @@
             "location": "python_app/pqc_migrated.py",
             "line": 12,
             "rule_ids": [
-              "py-ml-dsa"
-            ]
-          },
-          {
-            "location": "python_app/pqc_migrated.py",
-            "line": 13,
-            "rule_ids": [
+              "py-dilithium",
               "py-ml-dsa"
             ]
           }
@@ -387,13 +375,7 @@
             "location": "js_app/pqc_migrated.js",
             "line": 4,
             "rule_ids": [
-              "js-ml-kem"
-            ]
-          },
-          {
-            "location": "js_app/pqc_migrated.js",
-            "line": 5,
-            "rule_ids": [
+              "js-kyber",
               "js-ml-kem"
             ]
           },
@@ -401,13 +383,7 @@
             "location": "python_app/pqc_migrated.py",
             "line": 8,
             "rule_ids": [
-              "py-ml-kem"
-            ]
-          },
-          {
-            "location": "python_app/pqc_migrated.py",
-            "line": 9,
-            "rule_ids": [
+              "py-kyber",
               "py-ml-kem"
             ]
           }
@@ -438,13 +414,6 @@
           {
             "location": "python_app/requirements.txt",
             "line": 6,
-            "rule_ids": [
-              "dep-liboqs"
-            ]
-          },
-          {
-            "location": "python_app/requirements.txt",
-            "line": 7,
             "rule_ids": [
               "dep-liboqs"
             ]
@@ -655,28 +624,16 @@
             "location": "js_app/pqc_migrated.js",
             "line": 8,
             "rule_ids": [
-              "js-slh-dsa"
-            ]
-          },
-          {
-            "location": "js_app/pqc_migrated.js",
-            "line": 9,
-            "rule_ids": [
-              "js-slh-dsa"
+              "js-slh-dsa",
+              "js-sphincs"
             ]
           },
           {
             "location": "python_app/pqc_migrated.py",
             "line": 16,
             "rule_ids": [
-              "py-slh-dsa"
-            ]
-          },
-          {
-            "location": "python_app/pqc_migrated.py",
-            "line": 17,
-            "rule_ids": [
-              "py-slh-dsa"
+              "py-slh-dsa",
+              "py-sphincs"
             ]
           }
         ]

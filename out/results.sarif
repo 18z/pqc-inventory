@@ -716,7 +716,32 @@
                 "text": "js-ml-kem"
               },
               "fullDescription": {
-                "text": "NIST ML-KEM (Kyber) post-quantum KEM"
+                "text": "NIST ML-KEM post-quantum KEM (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-kyber",
+              "name": "js_kyber",
+              "shortDescription": {
+                "text": "js-kyber"
+              },
+              "fullDescription": {
+                "text": "NIST ML-KEM post-quantum KEM (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
@@ -741,7 +766,32 @@
                 "text": "js-ml-dsa"
               },
               "fullDescription": {
-                "text": "NIST ML-DSA (Dilithium) post-quantum signature"
+                "text": "NIST ML-DSA post-quantum signature (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-dilithium",
+              "name": "js_dilithium",
+              "shortDescription": {
+                "text": "js-dilithium"
+              },
+              "fullDescription": {
+                "text": "NIST ML-DSA post-quantum signature (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
@@ -766,7 +816,32 @@
                 "text": "js-slh-dsa"
               },
               "fullDescription": {
-                "text": "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+                "text": "NIST SLH-DSA post-quantum signature (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-sphincs",
+              "name": "js_sphincs",
+              "shortDescription": {
+                "text": "js-sphincs"
+              },
+              "fullDescription": {
+                "text": "NIST SLH-DSA post-quantum signature (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
@@ -816,7 +891,32 @@
                 "text": "py-ml-kem"
               },
               "fullDescription": {
-                "text": "NIST ML-KEM (Kyber) post-quantum KEM"
+                "text": "NIST ML-KEM post-quantum KEM (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-kyber",
+              "name": "py_kyber",
+              "shortDescription": {
+                "text": "py-kyber"
+              },
+              "fullDescription": {
+                "text": "NIST ML-KEM post-quantum KEM (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
@@ -841,7 +941,32 @@
                 "text": "py-ml-dsa"
               },
               "fullDescription": {
-                "text": "NIST ML-DSA (Dilithium) post-quantum signature"
+                "text": "NIST ML-DSA post-quantum signature (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-dilithium",
+              "name": "py_dilithium",
+              "shortDescription": {
+                "text": "py-dilithium"
+              },
+              "fullDescription": {
+                "text": "NIST ML-DSA post-quantum signature (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
@@ -866,7 +991,32 @@
                 "text": "py-slh-dsa"
               },
               "fullDescription": {
-                "text": "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+                "text": "NIST SLH-DSA post-quantum signature (+1 overlapping rules)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-sphincs",
+              "name": "py_sphincs",
+              "shortDescription": {
+                "text": "py-sphincs"
+              },
+              "fullDescription": {
+                "text": "NIST SLH-DSA post-quantum signature (+1 overlapping rules)"
               },
               "help": {
                 "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."

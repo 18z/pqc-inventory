@@ -3,6 +3,9 @@
 Same file+line (or same file + overlapping snippet within a family cluster)
 that hit multiple rules are collapsed into one parent finding listing combined
 rule ids / families. Optional children retain the raw hits.
+
+SAFE / NIST PQC alias pairs (ML-KEM↔Kyber, ML-DSA↔Dilithium, SLH-DSA↔SPHINCS+)
+on the same logical site are likewise collapsed so inventory is not double-counted.
 """
 
 from __future__ import annotations
@@ -57,6 +60,17 @@ def _family_related(a: str, b: str) -> bool:
 # Window is tight so a nearby unrelated keygen is a different site and is kept.
 TLS_SITE_LINE_WINDOW = 6
 PROTOCOL_TLS_RULE_IDS = frozenset({"py-ssl", "js-tls"})
+
+# SAFE / NIST PQC: canonical family ← legacy aliases (same logical migration site).
+SAFE_SITE_LINE_WINDOW = 6
+SAFE_ALIAS_GROUPS: dict[str, frozenset[str]] = {
+    "ML-KEM": frozenset({"ML-KEM", "Kyber"}),
+    "ML-DSA": frozenset({"ML-DSA", "Dilithium"}),
+    "SLH-DSA": frozenset({"SLH-DSA", "SPHINCS+", "SPHINCS", "Sphincs+", "Sphincs"}),
+}
+# Falcon / generic liboqs stay under PQC; merge only same-family SAFE nearby.
+_SAFE_ALIAS_RULE_MARKERS = ("kyber", "dilithium", "sphincs")
+_SAFE_CANONICAL_RULE_MARKERS = ("ml-kem", "ml-dsa", "slh-dsa")
 
 
 def _rule_ids(f) -> list[str]:
@@ -139,6 +153,59 @@ def count_tls_double_labeled_sites(findings: Iterable) -> int:
     return n
 
 
+
+def _families_of(f) -> set[str]:
+    fams = set(getattr(f, "families", None) or [])
+    fam = getattr(f, "family", "") or ""
+    if fam:
+        fams.add(fam)
+    fams.discard("")
+    return fams
+
+
+def _safe_group_key(f) -> str | None:
+    """Canonical SAFE alias-group key, or family for other SAFE hits, else None."""
+    if getattr(f, "quantum_risk", None) != "safe":
+        return None
+    fams = _families_of(f)
+    for canonical, members in SAFE_ALIAS_GROUPS.items():
+        if fams & members:
+            return canonical
+    rid = " ".join(_rule_ids(f)).lower()
+    if any(m in rid for m in ("ml-kem", "kyber")):
+        return "ML-KEM"
+    if any(m in rid for m in ("ml-dsa", "dilithium")):
+        return "ML-DSA"
+    if any(m in rid for m in ("slh-dsa", "sphincs")):
+        return "SLH-DSA"
+    if "PQC" in fams or "Falcon" in fams or "falcon" in rid or "liboqs" in rid or "pqc-generic" in rid:
+        return "PQC"
+    if len(fams) == 1:
+        return next(iter(fams))
+    return None
+
+
+def is_safe_alias_rule(rule_id: str) -> bool:
+    rid = (rule_id or "").lower()
+    return any(m in rid for m in _SAFE_ALIAS_RULE_MARKERS)
+
+
+def safe_alias_same_site(a, b) -> bool:
+    """SAFE findings in the same NIST alias group (or same SAFE family) nearby.
+
+    Window matches TLS site merge (~6 lines). Different algorithms stay separate
+    even when adjacent. Far-apart same-family hits stay separate sites.
+    """
+    if getattr(a, "file", None) != getattr(b, "file", None):
+        return False
+    ga, gb = _safe_group_key(a), _safe_group_key(b)
+    if ga is None or gb is None or ga != gb:
+        return False
+    if a.line is None or b.line is None:
+        return False
+    return abs(int(a.line) - int(b.line)) <= SAFE_SITE_LINE_WINDOW
+
+
 @dataclass
 class MergedFinding:
     """Parent finding after denoise merge (keeps buyer-interview fields)."""
@@ -183,6 +250,9 @@ def _should_merge_pair(a: Finding, b: Finding) -> bool:
     # Protocol-level TLS and the suite algorithm are one site (score once).
     if tls_protocol_algorithm_same_site(a, b):
         return True
+    # SAFE NIST aliases (or same SAFE family) on the same logical site.
+    if safe_alias_same_site(a, b):
+        return True
     # Exact same line
     if a.line is not None and a.line == b.line:
         return True
@@ -217,11 +287,12 @@ def _build_clusters(findings: list[Finding]) -> list[list[Finding]]:
 
 
 def _pick_primary(group: list[Finding]) -> Finding:
-    # Prefer the more specific algorithm over a protocol-only TLS duplicate.
+    # Prefer algorithm over protocol-only TLS; prefer canonical SAFE over alias.
     return sorted(
         group,
         key=lambda f: (
             1 if is_protocol_only_tls_finding(f) else 0,
+            1 if is_safe_alias_rule(getattr(f, "rule_id", "") or "") else 0,
             RISK_RANK.get(f.quantum_risk, 9),
             f.rule_id,
         ),
@@ -270,10 +341,17 @@ def merge_findings(findings: Iterable[Finding]) -> list[MergedFinding]:
         desc = primary.description
         if len(descriptions) > 1:
             desc = f"{primary.description} (+{len(descriptions) - 1} overlapping rules)"
+        # Prefer canonical NIST family label when an alias group was merged.
+        family = primary.family
+        group_key = _safe_group_key(primary)
+        if group_key and group_key in SAFE_ALIAS_GROUPS:
+            family = group_key
+            if group_key not in families:
+                families = sorted(set(families) | {group_key})
         merged.append(
             MergedFinding(
                 rule_id=primary.rule_id,
-                family=primary.family,
+                family=family,
                 file=primary.file,
                 line=primary.line,
                 snippet=primary.snippet,

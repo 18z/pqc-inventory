@@ -50,6 +50,11 @@ Score = algorithm risk + data lifetime + exposure.
 - If you do not set a lifetime, the field stays unknown. The tool **does not guess**.
 - Local hash / checksum hits are downranked by default so they do not flood the report.
 - `safe` never trips `--fail-on` and is omitted from SARIF alerts.
+- **SAFE alias merge**: canonical NIST names and legacy aliases on the same asset
+  (same file, nearby lines) are merged into one finding — e.g. ML-KEM↔Kyber,
+  ML-DSA↔Dilithium, SLH-DSA↔SPHINCS+ — so inventory / `priority_score` is not
+  double-counted. Combined `rule_ids` / `families` / `merged_count` are kept;
+  the canonical family label is preferred.
 
 Set a lifetime yourself (optional):
 
