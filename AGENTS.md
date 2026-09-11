@@ -31,8 +31,19 @@ Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`
 
 - Scope is source + dependency manifests only. Do not claim runtime, binary, or full-estate coverage.
 - CBOM may include `pqc-inventory:ref:*` planning references (EO 14412 / CNSA / NIST IR 8547). Never claim the scan certifies compliance.
-- `results.sarif` is SARIF 2.1.0; only non-suppressed findings become alerts. Upload with `github/codeql-action/upload-sarif@v3` (`sarif_file: out/results.sarif`); workflow needs `security-events: write`. Still static-only / not certification.
-  Example:
+- `results.sarif` is SARIF 2.1.0; only non-suppressed, non-`safe` findings become alerts. SAFE (NIST PQC / already-migrated) stays in inventory/CBOM/report. Upload with `github/codeql-action/upload-sarif@v3`; workflow needs `security-events: write`. Still static-only / not certification.
+  Drop-in Action:
+  ```yaml
+  - uses: 18z/pqc-inventory/.github/actions/scan@main
+    with:
+      path: .
+      out: out
+      fail-on: high
+  - uses: github/codeql-action/upload-sarif@v3
+    with:
+      sarif_file: ${{ steps.<id>.outputs.sarif-file }}
+  ```
+  Or CLI:
   ```yaml
   - run: pqc-inventory scan . --out out --fail-on never
   - uses: github/codeql-action/upload-sarif@v3
@@ -42,7 +53,7 @@ Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`
 - Never invent `data_lifetime_years` or sensitivity. Leave unknown unless the user sets an override.
 - Overrides: `--set-lifetime 'path:line=15'`, `--set-exposure`, `--set-owner`, or a line comment `# pqc-inventory: lifetime=15 exposure=public_key owner=team`.
 - Hash/checksum noise: default `--hash-policy downrank`. Use `drop` to omit, `keep` to keep.
-- Exit codes: `0` ok, `1` over `--fail-on` / `--fail-score`, `2` bad path or args.
+- Exit codes: `0` ok, `1` over `--fail-on` / `--fail-score`, `2` bad path or args. `safe` never trips `--fail-on`.
 - CI that must not fail on demo highs: `--fail-on never`.
 - Baseline (known findings): `--write-baseline PATH` after a scan; `--baseline PATH` to suppress known fingerprints for fail-on / fail-score (primary report list is new-only). Fingerprint = `sha256(rule_id|file|normalize_whitespace(snippet))`, line-insensitive. Bad/missing baseline → exit 2.
 - Do not rewrite crypto, rotate keys, or "fix" findings unless the user explicitly asks.

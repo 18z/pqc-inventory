@@ -1,0 +1,20 @@
+pqc-inventory — SAFE vs SARIF (static inventory only)
+
+  Source / manifests
+        |
+        v
+  +------------------+
+  |  rules classify  |
+  +--------+---------+
+           |
+     +-----+------+
+     |            |
+  classical     NIST PQC
+  high/med/...  (ML-KEM / ML-DSA / SLH-DSA)
+     |            |
+     v            v
+ inventory     inventory
+ report.md     report.md   <-- SAFE listed for migration tracking
+ CBOM          CBOM
+ SARIF alert   (omitted)   <-- not a vulnerability alert
+ --fail-on     ignored by --fail-on

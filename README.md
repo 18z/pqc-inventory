@@ -38,6 +38,7 @@ CBOM `metadata.properties` include EO 14412 / CNSA 2.0 / NIST IR 8547 **timeline
 ## Feedback
 
 - Waitlist (comment to try it on a real repo): https://github.com/18z/pqc-inventory/discussions/4
+- Action + SAFE tracking: https://github.com/18z/pqc-inventory/discussions/5
 - Feedback issue: https://github.com/18z/pqc-inventory/issues/2
 - Details: [FEEDBACK.md](FEEDBACK.md)
 
@@ -45,8 +46,10 @@ CBOM `metadata.properties` include EO 14412 / CNSA 2.0 / NIST IR 8547 **timeline
 
 Score = algorithm risk + data lifetime + exposure.
 
+- Levels: `high` / `medium` / `low` / `info` / **`safe`** (NIST PQC already-migrated; not a vulnerability).
 - If you do not set a lifetime, the field stays unknown. The tool **does not guess**.
 - Local hash / checksum hits are downranked by default so they do not flood the report.
+- `safe` never trips `--fail-on` and is omitted from SARIF alerts.
 
 Set a lifetime yourself (optional):
 
@@ -63,6 +66,23 @@ Or on the line above the code:
 ```
 
 ## CI (optional)
+
+### Drop-in composite Action
+
+```yaml
+- uses: 18z/pqc-inventory/.github/actions/scan@main
+  with:
+    path: .
+    out: out
+    fail-on: high
+```
+
+Inputs: `path`, `out`, `fail-on` (default `high`), optional `baseline`, optional `hash-policy`.
+Outputs: `out-dir`, `sarif-file`. The action does not upload artifacts itself.
+
+Full example (with optional SARIF upload): `.github/workflows/pqc-inventory.example.yml`
+
+### CLI
 
 Fail when there is a HIGH finding:
 
@@ -115,10 +135,12 @@ Upload SARIF to GitHub code scanning (needs `security-events: write`):
     sarif_file: out/results.sarif
 ```
 
-Suppressed findings (for example downranked local hashes) are omitted from SARIF alerts.
+Suppressed findings (for example downranked local hashes) and **SAFE** NIST PQC
+hits (ML-KEM / ML-DSA / SLH-DSA) are omitted from SARIF alerts — they stay in
+inventory / CBOM / report for migration tracking.
 Scope remains static source + manifests only; SARIF output does not certify compliance.
 
-Example workflow: `.github/workflows/pqc-inventory.yml`
+Example workflow: `.github/workflows/pqc-inventory.example.yml`
 
 ## What it does not do
 

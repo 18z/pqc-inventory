@@ -20,6 +20,14 @@ from pqc_inventory.rules import ALL_RULES, JS_RULES, MANIFEST_RULES, PYTHON_RULE
         ("Cipher(algorithms.AES(key), modes.ECB())", "AES", "low"),
         ("hashlib.sha256(b'data')", "SHA/Hash", "info"),
         ("from Crypto.PublicKey.RSA import generate", "RSA", "high"),
+        ("alg = 'ML-KEM-768'", "ML-KEM", "safe"),
+        ("kem = Kyber768()", "ML-KEM", "safe"),
+        ("sig = ML-DSA-65", "ML-DSA", "safe"),
+        ("Dilithium3.sign(msg)", "ML-DSA", "safe"),
+        ("SLH-DSA-SHA2-128s", "SLH-DSA", "safe"),
+        ("SPHINCS+.verify(sig)", "SLH-DSA", "safe"),
+        ("Falcon-512 keygen", "PQC", "safe"),
+        ("oqs.KeyEncapsulation('ML-KEM-768')", "PQC", "safe"),
     ],
 )
 def test_python_snippets(snippet, expected_family, expected_risk):
@@ -43,6 +51,10 @@ def test_python_snippets(snippet, expected_family, expected_risk):
         ("crypto.createCipheriv('aes-256-gcm', key, iv)", "AES", "low"),
         ("crypto.createHash('sha256')", "SHA/Hash", "info"),
         ("const crypto = require('crypto');", "node:crypto", "medium"),
+        ("const a = 'ML-KEM-768';", "ML-KEM", "safe"),
+        ("const d = 'Dilithium3';", "ML-DSA", "safe"),
+        ("const s = 'SPHINCS+';", "SLH-DSA", "safe"),
+        ("const f = 'Falcon-512';", "PQC", "safe"),
     ],
 )
 def test_js_snippets(snippet, expected_family, expected_risk):
@@ -62,6 +74,8 @@ def test_js_snippets(snippet, expected_family, expected_risk):
         ('"node-forge": "^1.3.1",', "dep-node-forge"),
         ('"jose": "^5.2.0"', "dep-jose"),
         ("pycryptodome>=3.19.0", "dep-pycryptodome"),
+        ("oqs-python>=0.10.0", "dep-liboqs"),
+        ("ml-kem>=1.0", "dep-ml-kem"),
     ],
 )
 def test_manifest_snippets(snippet, expected_id):

@@ -1,21 +1,26 @@
 {
   "tool": "pqc-inventory",
-  "version": "0.1.0",
-  "generated_at": "2026-09-10T01:18:05.765314+00:00",
+  "version": "0.1.1",
+  "generated_at": "2026-09-11T01:14:39.288243+00:00",
   "target": "/workspace/a3-pqc-inventory/samples/vulnerable-app",
-  "files_scanned": 5,
+  "files_scanned": 7,
   "summary": {
-    "total_findings": 33,
-    "raw_findings_before_merge": 41,
+    "total_findings": 49,
+    "raw_findings_before_merge": 57,
     "by_risk": {
       "high": 19,
       "medium": 9,
       "low": 2,
-      "info": 3
+      "info": 3,
+      "safe": 16
     },
     "by_family": {
       "RSA": 9,
       "ECDSA/ECDH": 4,
+      "ML-DSA": 4,
+      "ML-KEM": 4,
+      "PQC": 4,
+      "SLH-DSA": 4,
       "AES": 3,
       "ECDSA": 3,
       "EdDSA": 3,
@@ -1121,13 +1126,509 @@
       "baseline_suppressed": false
     },
     {
+      "rule_id": "dep-liboqs",
+      "family": "PQC",
+      "file": "python_app/requirements.txt",
+      "line": 6,
+      "snippet": "# PQC (demo): oqs-python / liboqs bindings — expected SAFE in inventory",
+      "quantum_risk": "safe",
+      "priority": 31,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "liboqs / pqcrypto dependency (PQC)",
+      "language": "manifest",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "dep-liboqs"
+      ],
+      "families": [
+        "PQC"
+      ],
+      "descriptions": [
+        "liboqs / pqcrypto dependency (PQC)"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "library_import",
+      "priority_score": 32,
+      "priority_reason": "score=32 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "dep-liboqs",
+      "family": "PQC",
+      "file": "python_app/requirements.txt",
+      "line": 7,
+      "snippet": "# oqs-python>=0.10.0",
+      "quantum_risk": "safe",
+      "priority": 32,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "liboqs / pqcrypto dependency (PQC)",
+      "language": "manifest",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "dep-liboqs"
+      ],
+      "families": [
+        "PQC"
+      ],
+      "descriptions": [
+        "liboqs / pqcrypto dependency (PQC)"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "library_import",
+      "priority_score": 32,
+      "priority_reason": "score=32 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=crypto library import or dependency:12)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-ml-kem",
+      "family": "ML-KEM",
+      "file": "js_app/pqc_migrated.js",
+      "line": 4,
+      "snippet": "const ML_KEM = 'ML-KEM-768';",
+      "quantum_risk": "safe",
+      "priority": 33,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-KEM (Kyber) post-quantum KEM",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-ml-kem"
+      ],
+      "families": [
+        "ML-KEM"
+      ],
+      "descriptions": [
+        "NIST ML-KEM (Kyber) post-quantum KEM"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-ml-kem",
+      "family": "ML-KEM",
+      "file": "js_app/pqc_migrated.js",
+      "line": 5,
+      "snippet": "const kyber = 'Kyber768';",
+      "quantum_risk": "safe",
+      "priority": 34,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-KEM (Kyber) post-quantum KEM",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-ml-kem"
+      ],
+      "families": [
+        "ML-KEM"
+      ],
+      "descriptions": [
+        "NIST ML-KEM (Kyber) post-quantum KEM"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-ml-dsa",
+      "family": "ML-DSA",
+      "file": "js_app/pqc_migrated.js",
+      "line": 6,
+      "snippet": "const ML_DSA = 'ML-DSA-65';",
+      "quantum_risk": "safe",
+      "priority": 35,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-DSA (Dilithium) post-quantum signature",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-ml-dsa"
+      ],
+      "families": [
+        "ML-DSA"
+      ],
+      "descriptions": [
+        "NIST ML-DSA (Dilithium) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-ml-dsa",
+      "family": "ML-DSA",
+      "file": "js_app/pqc_migrated.js",
+      "line": 7,
+      "snippet": "const dilithium = 'Dilithium3';",
+      "quantum_risk": "safe",
+      "priority": 36,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-DSA (Dilithium) post-quantum signature",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-ml-dsa"
+      ],
+      "families": [
+        "ML-DSA"
+      ],
+      "descriptions": [
+        "NIST ML-DSA (Dilithium) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-slh-dsa",
+      "family": "SLH-DSA",
+      "file": "js_app/pqc_migrated.js",
+      "line": 8,
+      "snippet": "const SLH_DSA = 'SLH-DSA-SHA2-128s';",
+      "quantum_risk": "safe",
+      "priority": 37,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST SLH-DSA (SPHINCS+) post-quantum signature",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-slh-dsa"
+      ],
+      "families": [
+        "SLH-DSA"
+      ],
+      "descriptions": [
+        "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-slh-dsa",
+      "family": "SLH-DSA",
+      "file": "js_app/pqc_migrated.js",
+      "line": 9,
+      "snippet": "const sphincs = 'SPHINCS+';",
+      "quantum_risk": "safe",
+      "priority": 38,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST SLH-DSA (SPHINCS+) post-quantum signature",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-slh-dsa"
+      ],
+      "families": [
+        "SLH-DSA"
+      ],
+      "descriptions": [
+        "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "js-falcon",
+      "family": "PQC",
+      "file": "js_app/pqc_migrated.js",
+      "line": 10,
+      "snippet": "const falcon = 'Falcon-512';",
+      "quantum_risk": "safe",
+      "priority": 39,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "Falcon post-quantum signature",
+      "language": "javascript",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "js-falcon"
+      ],
+      "families": [
+        "PQC"
+      ],
+      "descriptions": [
+        "Falcon post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-ml-kem",
+      "family": "ML-KEM",
+      "file": "python_app/pqc_migrated.py",
+      "line": 8,
+      "snippet": "ML_KEM_768 = \"ML-KEM-768\"",
+      "quantum_risk": "safe",
+      "priority": 40,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-KEM (Kyber) post-quantum KEM",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-ml-kem"
+      ],
+      "families": [
+        "ML-KEM"
+      ],
+      "descriptions": [
+        "NIST ML-KEM (Kyber) post-quantum KEM"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-ml-kem",
+      "family": "ML-KEM",
+      "file": "python_app/pqc_migrated.py",
+      "line": 9,
+      "snippet": "kyber_alg = \"Kyber768\"",
+      "quantum_risk": "safe",
+      "priority": 41,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-KEM (Kyber) post-quantum KEM",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-ml-kem"
+      ],
+      "families": [
+        "ML-KEM"
+      ],
+      "descriptions": [
+        "NIST ML-KEM (Kyber) post-quantum KEM"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-ml-dsa",
+      "family": "ML-DSA",
+      "file": "python_app/pqc_migrated.py",
+      "line": 12,
+      "snippet": "ML_DSA_65 = \"ML-DSA-65\"",
+      "quantum_risk": "safe",
+      "priority": 42,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-DSA (Dilithium) post-quantum signature",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-ml-dsa"
+      ],
+      "families": [
+        "ML-DSA"
+      ],
+      "descriptions": [
+        "NIST ML-DSA (Dilithium) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-ml-dsa",
+      "family": "ML-DSA",
+      "file": "python_app/pqc_migrated.py",
+      "line": 13,
+      "snippet": "dilithium_alg = \"Dilithium3\"",
+      "quantum_risk": "safe",
+      "priority": 43,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST ML-DSA (Dilithium) post-quantum signature",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-ml-dsa"
+      ],
+      "families": [
+        "ML-DSA"
+      ],
+      "descriptions": [
+        "NIST ML-DSA (Dilithium) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-slh-dsa",
+      "family": "SLH-DSA",
+      "file": "python_app/pqc_migrated.py",
+      "line": 16,
+      "snippet": "SLH_DSA = \"SLH-DSA-SHA2-128s\"",
+      "quantum_risk": "safe",
+      "priority": 44,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST SLH-DSA (SPHINCS+) post-quantum signature",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-slh-dsa"
+      ],
+      "families": [
+        "SLH-DSA"
+      ],
+      "descriptions": [
+        "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-slh-dsa",
+      "family": "SLH-DSA",
+      "file": "python_app/pqc_migrated.py",
+      "line": 17,
+      "snippet": "sphincs_alg = \"SPHINCS+\"",
+      "quantum_risk": "safe",
+      "priority": 45,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "NIST SLH-DSA (SPHINCS+) post-quantum signature",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-slh-dsa"
+      ],
+      "families": [
+        "SLH-DSA"
+      ],
+      "descriptions": [
+        "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
+      "rule_id": "py-falcon",
+      "family": "PQC",
+      "file": "python_app/pqc_migrated.py",
+      "line": 20,
+      "snippet": "falcon_alg = \"Falcon-512\"",
+      "quantum_risk": "safe",
+      "priority": 46,
+      "reason": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability.",
+      "description": "Falcon post-quantum signature (NIST round / alternate)",
+      "language": "python",
+      "owner": "",
+      "data_lifetime_years": null,
+      "rule_ids": [
+        "py-falcon"
+      ],
+      "families": [
+        "PQC"
+      ],
+      "descriptions": [
+        "Falcon post-quantum signature (NIST round / alternate)"
+      ],
+      "merged_count": 1,
+      "children": [],
+      "exposure": "pqc_migrated",
+      "priority_score": 22,
+      "priority_reason": "score=22 (risk=safe:0 + lifetime unknown→mid(+unknown penalty):20 + exposure=NIST PQC / already-migrated:2)",
+      "overrides_applied": {},
+      "suppressed": false,
+      "baseline_suppressed": false
+    },
+    {
       "rule_id": "js-hash",
       "family": "SHA/Hash",
       "file": "js_app/crypto_demo.js",
       "line": 33,
       "snippet": "const hash = crypto.createHash('sha256').update('demo').digest('hex');",
       "quantum_risk": "info",
-      "priority": 31,
+      "priority": 47,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "SHA hash / integrity",
       "language": "javascript",
@@ -1160,7 +1661,7 @@
       "line": 5,
       "snippet": "import hashlib",
       "quantum_risk": "info",
-      "priority": 32,
+      "priority": 48,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",
@@ -1193,7 +1694,7 @@
       "line": 34,
       "snippet": "digest = hashlib.sha256(b\"demo\").hexdigest()",
       "quantum_risk": "info",
-      "priority": 33,
+      "priority": 49,
       "reason": "Hash / integrity primitive: generally acceptable post-quantum for integrity; prefer SHA-256+ or SHA-3; note Grover impact on brute-force.",
       "description": "hashlib digest / integrity",
       "language": "python",

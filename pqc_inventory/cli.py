@@ -16,7 +16,7 @@ from pqc_inventory.baseline import apply_baseline, load_baseline, save_baseline
 from pqc_inventory.report import write_outputs
 from pqc_inventory.scanner import scan_directory
 
-RISK_ORDER = {"high": 0, "medium": 1, "low": 2, "info": 3}
+RISK_ORDER = {"high": 0, "medium": 1, "low": 2, "info": 3, "safe": 4}
 FAIL_ON_CHOICES = ("never", "high", "medium", "low", "info")
 
 
@@ -164,7 +164,8 @@ def evaluate_fail(
         offenders = [
             f
             for f in active
-            if RISK_ORDER.get(getattr(f, "quantum_risk", "info"), 9) <= threshold
+            if getattr(f, "quantum_risk", "info") != "safe"
+            and RISK_ORDER.get(getattr(f, "quantum_risk", "info"), 9) <= threshold
         ]
         if offenders:
             return True, (
@@ -284,8 +285,9 @@ def main(argv: list[str] | None = None) -> int:
             + ")."
         )
         print(
-            f"  high={counts['high']} medium={counts['medium']} "
-            f"low={counts['low']} info={counts['info']}"
+            f"  high={counts.get('high', 0)} medium={counts.get('medium', 0)} "
+            f"low={counts.get('low', 0)} info={counts.get('info', 0)} "
+            f"safe={counts.get('safe', 0)}"
         )
         print(f"Wrote: {json_path}")
         print(f"Wrote: {md_path}")

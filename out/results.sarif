@@ -6,7 +6,7 @@
       "tool": {
         "driver": {
           "name": "pqc-inventory",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "informationUri": "https://github.com/18z/pqc-inventory",
           "rules": [
             {
@@ -682,6 +682,231 @@
                   "quantum"
                 ],
                 "problem.severity": "low"
+              }
+            },
+            {
+              "id": "dep-liboqs",
+              "name": "dep_liboqs",
+              "shortDescription": {
+                "text": "dep-liboqs"
+              },
+              "fullDescription": {
+                "text": "liboqs / pqcrypto dependency (PQC)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-ml-kem",
+              "name": "js_ml_kem",
+              "shortDescription": {
+                "text": "js-ml-kem"
+              },
+              "fullDescription": {
+                "text": "NIST ML-KEM (Kyber) post-quantum KEM"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-ml-dsa",
+              "name": "js_ml_dsa",
+              "shortDescription": {
+                "text": "js-ml-dsa"
+              },
+              "fullDescription": {
+                "text": "NIST ML-DSA (Dilithium) post-quantum signature"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-slh-dsa",
+              "name": "js_slh_dsa",
+              "shortDescription": {
+                "text": "js-slh-dsa"
+              },
+              "fullDescription": {
+                "text": "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "js-falcon",
+              "name": "js_falcon",
+              "shortDescription": {
+                "text": "js-falcon"
+              },
+              "fullDescription": {
+                "text": "Falcon post-quantum signature"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-ml-kem",
+              "name": "py_ml_kem",
+              "shortDescription": {
+                "text": "py-ml-kem"
+              },
+              "fullDescription": {
+                "text": "NIST ML-KEM (Kyber) post-quantum KEM"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-ml-dsa",
+              "name": "py_ml_dsa",
+              "shortDescription": {
+                "text": "py-ml-dsa"
+              },
+              "fullDescription": {
+                "text": "NIST ML-DSA (Dilithium) post-quantum signature"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-slh-dsa",
+              "name": "py_slh_dsa",
+              "shortDescription": {
+                "text": "py-slh-dsa"
+              },
+              "fullDescription": {
+                "text": "NIST SLH-DSA (SPHINCS+) post-quantum signature"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
+              }
+            },
+            {
+              "id": "py-falcon",
+              "name": "py_falcon",
+              "shortDescription": {
+                "text": "py-falcon"
+              },
+              "fullDescription": {
+                "text": "Falcon post-quantum signature (NIST round / alternate)"
+              },
+              "help": {
+                "text": "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — not a vulnerability."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "tags": [
+                  "security",
+                  "cryptography",
+                  "pqc",
+                  "quantum"
+                ],
+                "problem.severity": "safe"
               }
             },
             {

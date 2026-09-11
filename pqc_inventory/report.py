@@ -64,7 +64,7 @@ def build_inventory(result: ScanResult, baseline: dict | None = None) -> dict:
     raw_count = len(result.raw_findings) if result.raw_findings else len(result.findings)
 
     def _counts_by_risk(findings: list) -> dict[str, int]:
-        counts = {"high": 0, "medium": 0, "low": 0, "info": 0}
+        counts = {"high": 0, "medium": 0, "low": 0, "info": 0, "safe": 0}
         for f in findings:
             risk = getattr(f, "quantum_risk", None) or "info"
             counts[risk] = counts.get(risk, 0) + 1

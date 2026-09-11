@@ -1,16 +1,16 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:1e7918d0-148c-4b45-a14b-fcb5610144bb",
+  "serialNumber": "urn:uuid:bb4b6cc7-bd4b-47aa-a53e-08aa3708439d",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-10T01:18:05.767599+00:00",
+    "timestamp": "2026-09-11T01:14:39.290105+00:00",
     "tools": {
       "components": [
         {
           "type": "application",
           "name": "pqc-inventory",
-          "version": "0.1.0",
+          "version": "0.1.1",
           "description": "Defensive static crypto inventory / quantum-risk scanner (source + manifests only)"
         }
       ]
@@ -312,6 +312,162 @@
     },
     {
       "type": "cryptographic-asset",
+      "bom-ref": "crypto:ml-dsa",
+      "name": "ML-DSA",
+      "description": "Detected via static inventory (quantum_risk=safe; hint=nist-pqc-migrated)",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "executionEnvironment": "unknown",
+          "implementationPlatform": "unknown",
+          "cryptoFunctions": [
+            "keygen",
+            "sign",
+            "verify"
+          ],
+          "nistQuantumSecurityLevel": 3
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 6,
+            "rule_ids": [
+              "js-ml-dsa"
+            ]
+          },
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 7,
+            "rule_ids": [
+              "js-ml-dsa"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 12,
+            "rule_ids": [
+              "py-ml-dsa"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 13,
+            "rule_ids": [
+              "py-ml-dsa"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto:ml-kem",
+      "name": "ML-KEM",
+      "description": "Detected via static inventory (quantum_risk=safe; hint=nist-pqc-migrated)",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "kem",
+          "executionEnvironment": "unknown",
+          "implementationPlatform": "unknown",
+          "cryptoFunctions": [
+            "keygen",
+            "encapsulate",
+            "decapsulate"
+          ],
+          "nistQuantumSecurityLevel": 3
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 4,
+            "rule_ids": [
+              "js-ml-kem"
+            ]
+          },
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 5,
+            "rule_ids": [
+              "js-ml-kem"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 8,
+            "rule_ids": [
+              "py-ml-kem"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 9,
+            "rule_ids": [
+              "py-ml-kem"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto:pqc",
+      "name": "PQC",
+      "description": "Detected via static inventory (quantum_risk=safe; hint=nist-pqc-migrated)",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "other",
+          "executionEnvironment": "unknown",
+          "implementationPlatform": "unknown",
+          "cryptoFunctions": [
+            "keygen",
+            "encapsulate",
+            "sign"
+          ],
+          "nistQuantumSecurityLevel": 3
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "python_app/requirements.txt",
+            "line": 6,
+            "rule_ids": [
+              "dep-liboqs"
+            ]
+          },
+          {
+            "location": "python_app/requirements.txt",
+            "line": 7,
+            "rule_ids": [
+              "dep-liboqs"
+            ]
+          },
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 10,
+            "rule_ids": [
+              "js-falcon"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 20,
+            "rule_ids": [
+              "py-falcon"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "cryptographic-asset",
       "bom-ref": "crypto:pycryptodome",
       "name": "PyCryptodome",
       "description": "Detected via static inventory (quantum_risk=medium; hint=ambiguous-or-protocol)",
@@ -469,6 +625,58 @@
             "line": 34,
             "rule_ids": [
               "py-hashlib"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "cryptographic-asset",
+      "bom-ref": "crypto:slh-dsa",
+      "name": "SLH-DSA",
+      "description": "Detected via static inventory (quantum_risk=safe; hint=nist-pqc-migrated)",
+      "cryptoProperties": {
+        "assetType": "algorithm",
+        "algorithmProperties": {
+          "primitive": "signature",
+          "executionEnvironment": "unknown",
+          "implementationPlatform": "unknown",
+          "cryptoFunctions": [
+            "keygen",
+            "sign",
+            "verify"
+          ],
+          "nistQuantumSecurityLevel": 3
+        }
+      },
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 8,
+            "rule_ids": [
+              "js-slh-dsa"
+            ]
+          },
+          {
+            "location": "js_app/pqc_migrated.js",
+            "line": 9,
+            "rule_ids": [
+              "js-slh-dsa"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 16,
+            "rule_ids": [
+              "py-slh-dsa"
+            ]
+          },
+          {
+            "location": "python_app/pqc_migrated.py",
+            "line": 17,
+            "rule_ids": [
+              "py-slh-dsa"
             ]
           }
         ]

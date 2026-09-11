@@ -94,6 +94,26 @@ _FAMILY_CRYPTO: dict[str, dict[str, Any]] = {
         "cryptoFunctions": ["other"],
         "nistQuantumSecurityLevel": 0,
     },
+    "ML-KEM": {
+        "primitive": "kem",
+        "cryptoFunctions": ["keygen", "encapsulate", "decapsulate"],
+        "nistQuantumSecurityLevel": 3,
+    },
+    "ML-DSA": {
+        "primitive": "signature",
+        "cryptoFunctions": ["keygen", "sign", "verify"],
+        "nistQuantumSecurityLevel": 3,
+    },
+    "SLH-DSA": {
+        "primitive": "signature",
+        "cryptoFunctions": ["keygen", "sign", "verify"],
+        "nistQuantumSecurityLevel": 3,
+    },
+    "PQC": {
+        "primitive": "other",
+        "cryptoFunctions": ["keygen", "encapsulate", "sign"],
+        "nistQuantumSecurityLevel": 3,
+    },
 }
 
 _RISK_TO_OID_HINT = {
@@ -101,6 +121,7 @@ _RISK_TO_OID_HINT = {
     "medium": "ambiguous-or-protocol",
     "low": "symmetric-grover-consideration",
     "info": "hash-integrity",
+    "safe": "nist-pqc-migrated",
 }
 
 

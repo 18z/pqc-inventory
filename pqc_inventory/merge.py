@@ -15,7 +15,7 @@ from typing import Iterable
 from pqc_inventory.rules import PRIORITY_BY_RISK, REASON_BY_RISK
 from pqc_inventory.scanner import Finding
 
-RISK_RANK = {"high": 0, "medium": 1, "low": 2, "info": 3}
+RISK_RANK = {"high": 0, "medium": 1, "low": 2, "info": 3, "safe": 4}
 
 
 def _worse_risk(a: str, b: str) -> str:

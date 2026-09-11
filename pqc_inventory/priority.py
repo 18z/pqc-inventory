@@ -5,7 +5,7 @@ Formula (higher score = more urgent):
     priority_score = risk_points + lifetime_points + exposure_points
 
 risk_points:
-    high=100, medium=40, low=15, info=5
+    high=100, medium=40, low=15, info=5, safe=0
 
 lifetime_points:
     - known years (explicit override only): min(50, round(data_lifetime_years * 2))
@@ -18,6 +18,7 @@ exposure_points (heuristic from family / language / snippet, unless overridden):
     library_import (cryptography, node:crypto, forge, PyCryptodome deps): 12
     symmetric      (AES, ChaCha20):                6
     hash_local     (SHA/Hash):                     2
+    pqc_migrated   (ML-KEM, ML-DSA, SLH-DSA, PQC): 2
     other:                                         8
 
 When lifetime is null, exposure still differentiates two HIGHs
@@ -33,6 +34,7 @@ RISK_POINTS: dict[str, int] = {
     "medium": 40,
     "low": 15,
     "info": 5,
+    "safe": 0,
 }
 
 # Null lifetime → conservative mid (≈10y * 2) with a small unknown penalty baked in.
@@ -67,6 +69,12 @@ _SYMMETRIC_FAMILIES = {
 _HASH_FAMILIES = {
     "SHA/Hash",
 }
+_PQC_FAMILIES = {
+    "ML-KEM",
+    "ML-DSA",
+    "SLH-DSA",
+    "PQC",
+}
 
 EXPOSURE_POINTS: dict[str, int] = {
     "trust_boundary": 30,
@@ -74,6 +82,7 @@ EXPOSURE_POINTS: dict[str, int] = {
     "library_import": 12,
     "symmetric": 6,
     "hash_local": 2,
+    "pqc_migrated": 2,
     "other": 8,
 }
 
@@ -83,6 +92,7 @@ EXPOSURE_LABELS: dict[str, str] = {
     "library_import": "crypto library import or dependency",
     "symmetric": "local symmetric cipher",
     "hash_local": "local hash / integrity helper",
+    "pqc_migrated": "NIST PQC / already-migrated",
     "other": "other crypto usage",
 }
 
@@ -124,6 +134,8 @@ def classify_exposure(
         return "library_import"
     if fams & _SYMMETRIC_FAMILIES:
         return "symmetric"
+    if fams & _PQC_FAMILIES:
+        return "pqc_migrated"
     if fams & _HASH_FAMILIES:
         return "hash_local"
     return "other"

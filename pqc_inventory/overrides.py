@@ -24,6 +24,7 @@ VALID_EXPOSURES = {
     "library_import",
     "symmetric",
     "hash_local",
+    "pqc_migrated",
     "other",
 }
 

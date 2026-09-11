@@ -97,7 +97,7 @@ class ScanResult:
     overrides_applied_summary: dict = field(default_factory=dict)
 
     def counts_by_risk(self) -> dict[str, int]:
-        counts = {"high": 0, "medium": 0, "low": 0, "info": 0}
+        counts = {"high": 0, "medium": 0, "low": 0, "info": 0, "safe": 0}
         for f in self.findings:
             risk = f.quantum_risk if hasattr(f, "quantum_risk") else f["quantum_risk"]
             counts[risk] = counts.get(risk, 0) + 1
@@ -118,7 +118,7 @@ class ScanResult:
 
         Suppressed findings sort after non-suppressed at equal score.
         """
-        order = {"high": 0, "medium": 1, "low": 2, "info": 3}
+        order = {"high": 0, "medium": 1, "low": 2, "info": 3, "safe": 4}
 
         def key(f):
             score = getattr(f, "priority_score", 0) or 0

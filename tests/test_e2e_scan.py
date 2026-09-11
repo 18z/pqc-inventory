@@ -119,8 +119,13 @@ def test_e2e_sample_scan(tmp_path: Path):
     run = sarif["runs"][0]
     assert run["tool"]["driver"]["name"] == "pqc-inventory"
     sarif_results = run["results"]
-    active = [f for f in result.findings if not getattr(f, "suppressed", False)]
+    active = [
+        f
+        for f in result.findings
+        if not getattr(f, "suppressed", False) and f.quantum_risk != "safe"
+    ]
     assert len(sarif_results) == len(active)
+    assert "safe" in {f.quantum_risk for f in result.findings}
     # Suppressed findings must not appear as SARIF alerts
     for f in result.findings:
         if not getattr(f, "suppressed", False):

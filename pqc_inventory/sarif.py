@@ -16,6 +16,7 @@ _RISK_TO_LEVEL = {
     "medium": "warning",
     "low": "note",
     "info": "note",
+    # safe is omitted from SARIF results (positive PQC tracking only)
 }
 
 _DRIVER_NOTE = (
@@ -99,7 +100,8 @@ def _result_properties(f: Any) -> dict[str, Any]:
 def build_sarif(result: ScanResult) -> dict[str, Any]:
     """Build a SARIF 2.1.0 document from a ScanResult.
 
-    Only non-suppressed findings become SARIF results (alerts).
+    Only non-suppressed, non-safe findings become SARIF results (alerts).
+    SAFE / already-migrated PQC hits stay in inventory/CBOM/report only.
     """
     prioritized = result.prioritized()
     active = [
@@ -107,6 +109,7 @@ def build_sarif(result: ScanResult) -> dict[str, Any]:
         for f in prioritized
         if not getattr(f, "suppressed", False)
         and not getattr(f, "baseline_suppressed", False)
+        and getattr(f, "quantum_risk", "") != "safe"
     ]
     # Rules cover all findings (including suppressed) so descriptors stay stable,
     # but results only list active alerts.

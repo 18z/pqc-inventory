@@ -167,5 +167,9 @@ def test_write_outputs_emits_results_sarif(tmp_path: Path):
     assert sarif_path.is_file()
     doc = json.loads(sarif_path.read_text(encoding="utf-8"))
     assert doc["version"] == "2.1.0"
-    active = [f for f in result.findings if not getattr(f, "suppressed", False)]
+    active = [
+        f
+        for f in result.findings
+        if not getattr(f, "suppressed", False) and getattr(f, "quantum_risk", "") != "safe"
+    ]
     assert len(doc["runs"][0]["results"]) == len(active)

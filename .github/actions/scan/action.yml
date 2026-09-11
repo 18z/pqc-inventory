@@ -1,0 +1,75 @@
+name: pqc-inventory scan
+description: >
+  Drop-in composite action: install pqc-inventory and run a static crypto /
+  PQC inventory scan. Emits inventory.json, report.md, cbom.cdx.json, and
+  results.sarif under the out directory. SAFE (NIST PQC) hits stay in
+  inventory/CBOM/report and are omitted from SARIF alerts.
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  path:
+    description: Directory (or file) to scan
+    required: false
+    default: "."
+  out:
+    description: Output directory for inventory/report/CBOM/SARIF
+    required: false
+    default: "out"
+  fail-on:
+    description: Fail the job when a finding at this risk or worse is present (never|high|medium|low|info). SAFE never trips this.
+    required: false
+    default: "high"
+  baseline:
+    description: Optional path to a baseline JSON of known fingerprints
+    required: false
+    default: ""
+  hash-policy:
+    description: Hash/checksum noise policy (drop|downrank|keep)
+    required: false
+    default: "downrank"
+
+outputs:
+  out-dir:
+    description: Absolute path to the output directory
+    value: ${{ steps.scan.outputs.out-dir }}
+  sarif-file:
+    description: Absolute path to results.sarif
+    value: ${{ steps.scan.outputs.sarif-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install pqc-inventory
+      shell: bash
+      run: |
+        set -euo pipefail
+        REPO_ROOT="$(cd "${{ github.action_path }}/../.." && pwd)"
+        if [[ -f "${REPO_ROOT}/pyproject.toml" ]]; then
+          pip install "${REPO_ROOT}"
+        else
+          pip install "git+https://github.com/18z/pqc-inventory@${{ github.action_ref }}"
+        fi
+
+    - name: Run pqc-inventory scan
+      id: scan
+      shell: bash
+      run: |
+        set -euo pipefail
+        OUT="${{ inputs.out }}"
+        mkdir -p "$OUT"
+        ARGS=(scan "${{ inputs.path }}" --out "$OUT" --fail-on "${{ inputs.fail-on }}" --hash-policy "${{ inputs.hash-policy }}")
+        if [[ -n "${{ inputs.baseline }}" ]]; then
+          ARGS+=(--baseline "${{ inputs.baseline }}")
+        fi
+        pqc-inventory "${ARGS[@]}"
+        # Resolve absolute paths for outputs
+        OUT_ABS="$(cd "$OUT" && pwd)"
+        echo "out-dir=${OUT_ABS}" >> "$GITHUB_OUTPUT"
+        echo "sarif-file=${OUT_ABS}/results.sarif" >> "$GITHUB_OUTPUT"

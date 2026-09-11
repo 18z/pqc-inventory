@@ -5,6 +5,7 @@ Quantum-risk guidance (defensive inventory only — not an attack tool):
 - medium: ambiguous TLS/crypto wrappers without clear PQC
 - low:    AES/ChaCha (Grover reduces keyspace ~sqrt; prefer 256-bit keys)
 - info:   SHA-2/3 integrity / hashing (Grover may affect collision resistance)
+- safe:   NIST PQC / already-migrated (ML-KEM, ML-DSA, SLH-DSA); not a vulnerability
 """
 
 from __future__ import annotations
@@ -12,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-Risk = Literal["high", "medium", "low", "info"]
+Risk = Literal["high", "medium", "low", "info", "safe"]
 
 # Priority: lower number = higher urgency
 PRIORITY_BY_RISK: dict[str, int] = {
@@ -20,6 +21,7 @@ PRIORITY_BY_RISK: dict[str, int] = {
     "medium": 2,
     "low": 3,
     "info": 4,
+    "safe": 5,
 }
 
 REASON_BY_RISK: dict[str, str] = {
@@ -38,6 +40,11 @@ REASON_BY_RISK: dict[str, str] = {
     "info": (
         "Hash / integrity primitive: generally acceptable post-quantum for integrity; "
         "prefer SHA-256+ or SHA-3; note Grover impact on brute-force."
+    ),
+    "safe": (
+        "Already-migrated / NIST PQC (ML-KEM, ML-DSA, SLH-DSA or known aliases "
+        "Kyber/Dilithium/Falcon/SPHINCS+). Tracked for inventory completeness — "
+        "not a vulnerability."
     ),
 }
 
@@ -188,6 +195,48 @@ PYTHON_RULES: list[Rule] = [
         languages=("python",),
         description="hashlib digest / integrity",
     ),
+    # --- NIST PQC / already-migrated (positive detections; risk=safe) ---
+    Rule(
+        id="py-ml-kem",
+        family="ML-KEM",
+        pattern=r"(?i)\b(ML[-_]?KEM(?:[-_]?\d+)?|Kyber(?:512|768|1024)?)\b",
+        risk="safe",
+        languages=("python",),
+        description="NIST ML-KEM (Kyber) post-quantum KEM",
+    ),
+    Rule(
+        id="py-ml-dsa",
+        family="ML-DSA",
+        pattern=r"(?i)\b(ML[-_]?DSA(?:[-_]?\d+)?|Dilithium(?:2|3|5)?)\b",
+        risk="safe",
+        languages=("python",),
+        description="NIST ML-DSA (Dilithium) post-quantum signature",
+    ),
+    Rule(
+        id="py-slh-dsa",
+        family="SLH-DSA",
+        pattern=r"(?i)\b(SLH[-_]?DSA(?:[-_]?\w+)?|SPHINCS\+?|Sphincs\+?)\b",
+        risk="safe",
+        languages=("python",),
+        description="NIST SLH-DSA (SPHINCS+) post-quantum signature",
+    ),
+    Rule(
+        id="py-falcon",
+        family="PQC",
+        pattern=r"(?i)\bFalcon(?:[-_]?\d+)?\b",
+        risk="safe",
+        languages=("python",),
+        description="Falcon post-quantum signature (NIST round / alternate)",
+    ),
+    Rule(
+        id="py-pqc-generic",
+        family="PQC",
+        pattern=r"(?i)\b(oqs\.(?:KeyEncapsulation|Signature)|pqcrypto|liboqs)\b",
+        risk="safe",
+        languages=("python",),
+        description="liboqs / pqcrypto PQC API usage",
+    ),
+
 ]
 
 # ---------------------------------------------------------------------------
@@ -322,6 +371,48 @@ JS_RULES: list[Rule] = [
         languages=("javascript",),
         description="SHA hash / integrity",
     ),
+    # --- NIST PQC / already-migrated (positive detections; risk=safe) ---
+    Rule(
+        id="js-ml-kem",
+        family="ML-KEM",
+        pattern=r"(?i)\b(ML[-_]?KEM(?:[-_]?\d+)?|Kyber(?:512|768|1024)?)\b",
+        risk="safe",
+        languages=("javascript",),
+        description="NIST ML-KEM (Kyber) post-quantum KEM",
+    ),
+    Rule(
+        id="js-ml-dsa",
+        family="ML-DSA",
+        pattern=r"(?i)\b(ML[-_]?DSA(?:[-_]?\d+)?|Dilithium(?:2|3|5)?)\b",
+        risk="safe",
+        languages=("javascript",),
+        description="NIST ML-DSA (Dilithium) post-quantum signature",
+    ),
+    Rule(
+        id="js-slh-dsa",
+        family="SLH-DSA",
+        pattern=r"(?i)\b(SLH[-_]?DSA(?:[-_]?\w+)?|SPHINCS\+?|Sphincs\+?)\b",
+        risk="safe",
+        languages=("javascript",),
+        description="NIST SLH-DSA (SPHINCS+) post-quantum signature",
+    ),
+    Rule(
+        id="js-falcon",
+        family="PQC",
+        pattern=r"(?i)\bFalcon(?:[-_]?\d+)?\b",
+        risk="safe",
+        languages=("javascript",),
+        description="Falcon post-quantum signature",
+    ),
+    Rule(
+        id="js-pqc-generic",
+        family="PQC",
+        pattern=r"(?i)\b(@openquantumsafe|liboqs|pqcrypto)\b",
+        risk="safe",
+        languages=("javascript",),
+        description="liboqs / OpenQuantumSafe PQC usage",
+    ),
+
 ]
 
 # ---------------------------------------------------------------------------
@@ -384,6 +475,23 @@ MANIFEST_RULES: list[Rule] = [
         languages=("manifest",),
         description="PyJWT dependency",
     ),
+    Rule(
+        id="dep-liboqs",
+        family="PQC",
+        pattern=r"(?i)\b(liboqs|oqs-python|pqcrypto)\b",
+        risk="safe",
+        languages=("manifest",),
+        description="liboqs / pqcrypto dependency (PQC)",
+    ),
+    Rule(
+        id="dep-ml-kem",
+        family="ML-KEM",
+        pattern=r"(?i)\b(ml[-_]?kem|kyber)\b",
+        risk="safe",
+        languages=("manifest",),
+        description="ML-KEM / Kyber dependency",
+    ),
+
 ]
 
 ALL_RULES: list[Rule] = PYTHON_RULES + JS_RULES + MANIFEST_RULES

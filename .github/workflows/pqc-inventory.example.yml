@@ -1,0 +1,43 @@
+# Example consumer workflow — copy into your repo (or reference the composite
+# action directly). SAFE / NIST PQC hits are tracked in inventory/CBOM/report
+# but omitted from SARIF alerts.
+name: pqc-inventory
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  # Needed only if you upload SARIF to GitHub code scanning:
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PQC inventory scan
+        id: pqc
+        uses: 18z/pqc-inventory/.github/actions/scan@main
+        with:
+          path: .
+          out: out
+          fail-on: high
+          # baseline: .pqc-inventory-baseline.json
+          # hash-policy: downrank
+
+      - name: Upload SARIF to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.pqc.outputs.sarif-file }}
+
+      - name: Upload inventory artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pqc-inventory
+          path: ${{ steps.pqc.outputs.out-dir }}
