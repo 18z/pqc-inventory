@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import sys
 from pathlib import Path
 
@@ -13,7 +15,12 @@ from pqc_inventory.overrides import (
     parse_cli_override,
 )
 from pqc_inventory.baseline import apply_baseline, load_baseline, save_baseline
-from pqc_inventory.report import write_outputs
+from pqc_inventory.report import (
+    build_inventory,
+    render_step_summary,
+    write_outputs,
+    write_step_summary,
+)
 from pqc_inventory.scanner import scan_directory
 
 RISK_ORDER = {"high": 0, "medium": 1, "low": 2, "info": 3, "safe": 4}
@@ -133,6 +140,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     scan_p.add_argument(
+        "--write-step-summary",
+        type=str,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Append a CI step-summary markdown to PATH "
+            "(defaults to $GITHUB_STEP_SUMMARY when that env is set)."
+        ),
+    )
+    scan_p.add_argument(
         "--baseline",
         type=str,
         default=None,
@@ -141,6 +158,23 @@ def build_parser() -> argparse.ArgumentParser:
             "Load baseline fingerprints; matching findings are suppressed for "
             "--fail-on / --fail-score and omitted from the primary report list."
         ),
+    )
+
+    sum_p = sub.add_parser(
+        "summarize-out",
+        help="Write CI step summary from an existing out/inventory.json",
+    )
+    sum_p.add_argument(
+        "out",
+        type=str,
+        help="Output directory containing inventory.json (or path to inventory.json)",
+    )
+    sum_p.add_argument(
+        "--to",
+        type=str,
+        default=None,
+        metavar="PATH",
+        help="Append markdown to PATH (default: $GITHUB_STEP_SUMMARY or stdout)",
     )
     return parser
 
@@ -294,12 +328,34 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote: {cbom_path}")
         print(f"Wrote: {sarif_path}")
 
+        step_path = args.write_step_summary or os.environ.get("GITHUB_STEP_SUMMARY")
+        if step_path:
+            inv = build_inventory(result, baseline=baseline_meta)
+            write_step_summary(inv, step_path)
+            print(f"Wrote step summary: {step_path}")
+
         should_fail, reason = evaluate_fail(
             result.findings, fail_on=args.fail_on, fail_score=args.fail_score
         )
         if should_fail:
             print(f"fail: {reason}", file=sys.stderr)
             return 1
+        return 0
+
+    if args.command == "summarize-out":
+        out = Path(args.out)
+        inv_path = out if out.name.endswith(".json") else out / "inventory.json"
+        if not inv_path.is_file():
+            print(f"error: missing {inv_path}", file=sys.stderr)
+            return 2
+        inventory = json.loads(inv_path.read_text(encoding="utf-8"))
+        dest = args.to or os.environ.get("GITHUB_STEP_SUMMARY")
+        body = render_step_summary(inventory)
+        if dest:
+            write_step_summary(inventory, dest)
+            print(f"Wrote step summary: {dest}")
+        else:
+            print(body, end="" if body.endswith("\n") else "\n")
         return 0
 
     parser.error(f"unknown command: {args.command}")

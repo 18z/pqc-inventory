@@ -27,6 +27,7 @@ jobs:
           out: out
           fail-on: high
           # baseline: .pqc-inventory-baseline.json
+          # write-baseline: .pqc-inventory-baseline.json
           # hash-policy: downrank
 
       - name: Upload SARIF to code scanning

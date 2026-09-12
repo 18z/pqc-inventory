@@ -25,6 +25,10 @@ inputs:
     description: Optional path to a baseline JSON of known fingerprints
     required: false
     default: ""
+  write-baseline:
+    description: Optional path to write a new baseline after this scan (legacy-repo adopt flow)
+    required: false
+    default: ""
   hash-policy:
     description: Hash/checksum noise policy (drop|downrank|keep)
     required: false
@@ -68,6 +72,10 @@ runs:
         if [[ -n "${{ inputs.baseline }}" ]]; then
           ARGS+=(--baseline "${{ inputs.baseline }}")
         fi
+        if [[ -n "${{ inputs.write-baseline }}" ]]; then
+          ARGS+=(--write-baseline "${{ inputs.write-baseline }}")
+        fi
+        # write_outputs appends to $GITHUB_STEP_SUMMARY when that env is set
         pqc-inventory "${ARGS[@]}"
         # Resolve absolute paths for outputs
         OUT_ABS="$(cd "$OUT" && pwd)"

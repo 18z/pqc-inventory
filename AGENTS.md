@@ -24,6 +24,7 @@ Always pass `--out`. Read results from files, not from stdout.
 | `out/report.md` | Human priority report and next steps |
 | `out/cbom.cdx.json` | CycloneDX 1.6-oriented CBOM |
 | `out/results.sarif` | SARIF 2.1.0 for GitHub code scanning |
+| `readiness_score` in inventory/report | 0–100 static migration readiness (not certification) |
 
 Each finding includes `file`, `line`, `family`, `quantum_risk`, `priority_score`, `owner`, `data_lifetime_years`.
 

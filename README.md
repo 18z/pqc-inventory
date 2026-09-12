@@ -42,6 +42,17 @@ CBOM `metadata.properties` include EO 14412 / CNSA 2.0 / NIST IR 8547 **timeline
 - Feedback issue: https://github.com/18z/pqc-inventory/issues/2
 - Details: [FEEDBACK.md](FEEDBACK.md)
 
+## Readiness score (static only)
+
+Each scan emits a **readiness_score** (0–100) in `inventory.json` and `report.md`:
+
+- Mean of per-finding weights: high=0, medium=40, low=70, info=85, safe=100
+- Optional +5 soft boost when SAFE count ≥ HIGH count and HIGH > 0 (capped at 100)
+- Empty inventory → 100 with an explicit “nothing detected” note (not “fully migrated”)
+- **Not certification.** Static source + manifests only.
+
+CI: the drop-in Action appends a short summary to `$GITHUB_STEP_SUMMARY` (risk counts, score, top HIGH). Use `write-baseline` input to adopt on a legacy repo.
+
 ## How risk is ranked
 
 Score = algorithm risk + data lifetime + exposure.
@@ -82,7 +93,7 @@ Or on the line above the code:
     fail-on: high
 ```
 
-Inputs: `path`, `out`, `fail-on` (default `high`), optional `baseline`, optional `hash-policy`.
+Inputs: `path`, `out`, `fail-on` (default `high`), optional `baseline`, optional `write-baseline`, optional `hash-policy`.
 Outputs: `out-dir`, `sarif-file`. The action does not upload artifacts itself.
 
 Full example (with optional SARIF upload): `.github/workflows/pqc-inventory.example.yml`

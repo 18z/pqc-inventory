@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from pqc_inventory import __version__
 from pqc_inventory.cbom import build_cbom
 from pqc_inventory.sarif import build_sarif
 from pqc_inventory.overrides import summarize_overrides_applied
+from pqc_inventory.readiness import readiness_block
 from pqc_inventory.scanner import ScanResult
 
 SCOPE_BANNER = (
@@ -131,6 +133,7 @@ def build_inventory(result: ScanResult, baseline: dict | None = None) -> dict:
             "sort": "priority_score descending; priority field is display rank (1=most urgent)",
         },
     }
+    inv.update(readiness_block(prioritized))
     if baseline:
         inv["baseline"] = baseline
     return inv
@@ -151,8 +154,13 @@ def render_markdown(inventory: dict) -> str:
         f"- **Files scanned**: {inventory['files_scanned']}",
         f"- **Findings (merged)**: {summary['total_findings']} "
         f"(raw hits before merge: {raw})",
+        f"- **Readiness score**: {inventory.get('readiness_score', 'n/a')} / 100 "
+        f"(static scope only; not certification)",
         "",
     ]
+    note = inventory.get("readiness_note")
+    if note:
+        lines += [f"> **Readiness note:** {note}", ""]
 
     bl = inventory.get("baseline")
     if bl:
@@ -182,6 +190,7 @@ def render_markdown(inventory: dict) -> str:
         f"| medium | {by_risk.get('medium', 0)} |",
         f"| low | {by_risk.get('low', 0)} |",
         f"| info | {by_risk.get('info', 0)} |",
+        f"| safe | {by_risk.get('safe', 0)} |",
         "",
         "## Findings by algorithm / API family",
         "",
@@ -292,4 +301,75 @@ def write_outputs(
 
     sarif = build_sarif(result)
     sarif_path.write_text(json.dumps(sarif, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    step_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if step_path:
+        write_step_summary(inventory, step_path)
+
     return json_path, md_path, cbom_path, sarif_path
+
+
+def render_step_summary(inventory: dict) -> str:
+    """Markdown for GitHub Actions $GITHUB_STEP_SUMMARY (also usable offline)."""
+    summary = inventory.get("summary") or {}
+    by_risk = summary.get("by_risk") or {}
+    score = inventory.get("readiness_score", "n/a")
+    lines = [
+        "## pqc-inventory",
+        "",
+        f"**Readiness score:** {score} / 100 (static scope only; not certification)",
+        "",
+        "| Risk | Count |",
+        "|------|------:|",
+        f"| high | {by_risk.get('high', 0)} |",
+        f"| medium | {by_risk.get('medium', 0)} |",
+        f"| low | {by_risk.get('low', 0)} |",
+        f"| info | {by_risk.get('info', 0)} |",
+        f"| safe | {by_risk.get('safe', 0)} |",
+        "",
+    ]
+    bl = inventory.get("baseline") or {}
+    if "new_count" in bl:
+        lines += [
+            f"- Baseline: `{bl.get('path')}` — "
+            f"suppressed {bl.get('suppressed_count', 0)}, "
+            f"new {bl.get('new_count', 0)}",
+            "",
+        ]
+    findings = inventory.get("findings") or []
+    highs = [
+        f for f in findings if (f.get("quantum_risk") or "").lower() == "high"
+    ][:5]
+    if highs:
+        lines += ["### Top HIGH (max 5)", ""]
+        for f in highs:
+            loc = f.get("file", "?")
+            if f.get("line"):
+                loc = f"{loc}:{f['line']}"
+            fam = f.get("family") or ""
+            desc = f.get("description") or ""
+            lines.append(f"- `{loc}` — {fam}: {desc}")
+        lines.append("")
+    else:
+        lines += ["_No HIGH findings in the primary list._", ""]
+    target = inventory.get("target", ".")
+    lines += [
+        f"- Target: `{target}`",
+        "- Outputs: `report.md`, `inventory.json`, `cbom.cdx.json`, `results.sarif`",
+        "",
+        "_Static scan of source + dependency manifests only. Not runtime / not certification._",
+        "",
+    ]
+    return "\n".join(lines)
+
+
+def write_step_summary(inventory: dict, path: str | Path | None = None) -> str:
+    """Append step summary markdown to path (or return text only)."""
+    body = render_step_summary(inventory)
+    if path is not None:
+        p = Path(path)
+        with p.open("a", encoding="utf-8") as fh:
+            fh.write(body)
+            if not body.endswith("\n"):
+                fh.write("\n")
+    return body
